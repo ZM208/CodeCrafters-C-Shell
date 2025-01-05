@@ -8,9 +8,9 @@ while (true)
 {
     Console.Write("$ ");
     string userInput = Console.ReadLine() ?? "";
-    Console.Write($"{userInput}: command not found\n");
     if (userInput.Contains("exit"))
     {
         Environment.Exit(0);
     }
+    Console.Write($"{userInput}: command not found\n");
 }
