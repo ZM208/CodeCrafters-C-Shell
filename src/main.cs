@@ -5,4 +5,5 @@ using System.Net.Sockets;
 Console.Write("$ ");
 
 // Wait for user input
-Console.ReadLine();
+string userInput = Console.ReadLine();
+Console.Write($"{userInput}: command not found\n");
