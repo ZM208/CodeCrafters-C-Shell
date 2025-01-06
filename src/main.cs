@@ -4,18 +4,19 @@ using System;
 // Uncomment this line to pass the first stage
 
 // Wait for user input
+ string[] AllCommands = { "echo", "type", "exit" };
+
 while (true)
 {
-    Console.Write("$ ");
+    Console.Write("\n$ ");
     string userInput = Console.ReadLine() ?? "";
     string command = userInput.Split(' ')[0];
-
     switch (command)
     {
         case "echo":
             {
                 var text = userInput.Replace("echo ", "");
-                Console.Write(text + "\n");
+                Console.Write(text);
                 break;
             }
         case "exit":
@@ -23,9 +24,18 @@ while (true)
                 Environment.Exit(0);
                 break;
             }
+        case "type":
+            {
+                var inputText = userInput.Split(' ')[1];
+                if (AllCommands.Contains(inputText))
+                    Console.Write($"{inputText} is a shell builtin");
+                else
+                    Console.Write($"{inputText}: not found");
+                break;
+            }
         default:
             {
-                Console.Write($"{userInput}: command not found\n");
+                Console.Write($"{userInput}: command not found");
                 break;
             }
     }
