@@ -8,7 +8,7 @@ using System;
 
 while (true)
 {
-    Console.Write("\n$ ");
+    Console.Write("$ ");
     string userInput = Console.ReadLine() ?? "";
     string command = userInput.Split(' ')[0];
     switch (command)
@@ -39,4 +39,5 @@ while (true)
                 break;
             }
     }
+    Console.Write('\n');
 }
