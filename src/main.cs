@@ -5,7 +5,7 @@ using System;
 
 // Wait for user input
 string[] AllCommands = { "echo", "type", "exit" };
-string[] Paths; 
+string[]? Paths = Environment.GetEnvironmentVariable("PATH")?.Split(":"); 
 
 while (true)
 {
@@ -28,17 +28,14 @@ while (true)
         case "type":
             {
                 var inputText = userInput.Split(' ')[1];
-                if (AllCommands.Contains(inputText))
-                    Console.Write($"{inputText} is a shell builtin");
-                else
-                    Console.Write($"{inputText}: not found");
+                if (Paths != null)
+                    CheckCommandPathExists(inputText);
+                else 
+                    CheckCommandExists(inputText);
+                
                 break;
             }
-        case "PATH":
-            {
-                Paths = userInput.Replace(command, "").Split(':');
-                break;
-            }
+
         default:
             {
                 Console.Write($"{userInput}: command not found");
@@ -46,4 +43,25 @@ while (true)
             }
     }
     Console.Write('\n');
+}
+void CheckCommandPathExists(string inputText) 
+{
+    foreach (var path in Paths)
+    {
+        var fullPath = Path.Combine(path, inputText);
+        if (Path.Exists(fullPath))
+        {
+            Console.Write($"{inputText} is {fullPath}");
+            return;
+        }
+    }
+    Console.Write($"{inputText}: not found");
+}
+
+void CheckCommandExists(string inputText)
+{
+    if (AllCommands.Contains(inputText))
+        Console.Write($"{inputText} is a shell builtin");
+    else
+        Console.Write($"{inputText}: not found");
 }
