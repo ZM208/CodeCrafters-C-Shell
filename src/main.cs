@@ -28,11 +28,7 @@ while (true)
         case "type":
             {
                 var inputText = userInput.Split(' ')[1];
-                if (Paths != null)
-                    CheckCommandPathExists(inputText);
-                else 
-                    CheckCommandExists(inputText);
-                
+                CheckCommandPathExists(inputText);                
                 break;
             }
 
@@ -46,6 +42,11 @@ while (true)
 }
 void CheckCommandPathExists(string inputText) 
 {
+    if (AllCommands.Contains(inputText))
+    {
+        Console.Write($"{inputText} is a shell builtin");
+        return;
+    }    
     foreach (var path in Paths)
     {
         var fullPath = Path.Combine(path, inputText);
@@ -56,12 +57,4 @@ void CheckCommandPathExists(string inputText)
         }
     }
     Console.Write($"{inputText}: not found");
-}
-
-void CheckCommandExists(string inputText)
-{
-    if (AllCommands.Contains(inputText))
-        Console.Write($"{inputText} is a shell builtin");
-    else
-        Console.Write($"{inputText}: not found");
 }
