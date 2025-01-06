@@ -4,7 +4,8 @@ using System;
 // Uncomment this line to pass the first stage
 
 // Wait for user input
- string[] AllCommands = { "echo", "type", "exit" };
+string[] AllCommands = { "echo", "type", "exit" };
+string[] Paths; 
 
 while (true)
 {
@@ -31,6 +32,11 @@ while (true)
                     Console.Write($"{inputText} is a shell builtin");
                 else
                     Console.Write($"{inputText}: not found");
+                break;
+            }
+        case "PATH":
+            {
+                Paths = userInput.Replace(command, "").Split(':');
                 break;
             }
         default:
