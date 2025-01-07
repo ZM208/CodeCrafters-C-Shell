@@ -50,8 +50,8 @@ void CheckCommandPathExists(string inputText)
     var fullPath = CheckFilePathExist(inputText);
     if (!string.IsNullOrWhiteSpace(fullPath))
         Console.Write($"{inputText} is {fullPath} \n");
-
-    Console.Write($"{inputText}: not found \n");
+    else 
+        Console.Write($"{inputText}: not found \n");
 }
 
 void CheckForProgram(string userInput)
