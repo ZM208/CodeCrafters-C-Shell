@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System;
+using System.Diagnostics;
 // Uncomment this line to pass the first stage
 
 // Wait for user input
@@ -34,7 +35,7 @@ while (true)
 
         default:
             {
-                Console.Write($"{userInput}: command not found");
+                CheckForProgram(userInput);
                 break;
             }
     }
@@ -47,14 +48,35 @@ void CheckCommandPathExists(string inputText)
         Console.Write($"{inputText} is a shell builtin");
         return;
     }    
+    var fullPath = CheckFilePathExist(inputText);
+    if (!string.IsNullOrWhiteSpace(fullPath))
+        Console.Write($"{inputText} is {fullPath}");
+
+    Console.Write($"{inputText}: not found");
+}
+
+void CheckForProgram(string userInput)
+{
+    var splitArgs = userInput.Split(" ");
+    var fullPath = CheckFilePathExist(splitArgs[0]);
+    if (!string.IsNullOrWhiteSpace(fullPath))
+    {
+        ProcessStartInfo startInfo = new ProcessStartInfo(fullPath, splitArgs[1]);
+        Process.Start(startInfo);
+        return;
+    }
+    Console.Write($"{userInput}: command not found");
+}
+
+string CheckFilePathExist(string inputText)
+{
     foreach (var path in Paths)
     {
         var fullPath = Path.Combine(path, inputText);
         if (Path.Exists(fullPath))
         {
-            Console.Write($"{inputText} is {fullPath}");
-            return;
+            return fullPath;
         }
     }
-    Console.Write($"{inputText}: not found");
+    return "";
 }
