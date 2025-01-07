@@ -18,7 +18,7 @@ while (true)
         case "echo":
             {
                 var text = userInput.Replace("echo ", "");
-                Console.Write(text);
+                Console.Write(text + "\n");
                 break;
             }
         case "exit":
@@ -39,20 +39,19 @@ while (true)
                 break;
             }
     }
-    Console.Write('\n');
 }
 void CheckCommandPathExists(string inputText) 
 {
     if (AllCommands.Contains(inputText))
     {
-        Console.Write($"{inputText} is a shell builtin");
+        Console.Write($"{inputText} is a shell builtin \n");
         return;
     }    
     var fullPath = CheckFilePathExist(inputText);
     if (!string.IsNullOrWhiteSpace(fullPath))
-        Console.Write($"{inputText} is {fullPath}");
+        Console.Write($"{inputText} is {fullPath} \n");
 
-    Console.Write($"{inputText}: not found");
+    Console.Write($"{inputText}: not found \n");
 }
 
 void CheckForProgram(string userInput)
@@ -65,7 +64,7 @@ void CheckForProgram(string userInput)
         Process.Start(startInfo);
         return;
     }
-    Console.Write($"{userInput}: command not found");
+    Console.Write($"{userInput}: command not found \n");
 }
 
 string CheckFilePathExist(string inputText)
