@@ -61,7 +61,9 @@ void CheckForProgram(string userInput)
     if (!string.IsNullOrWhiteSpace(fullPath))
     {
         ProcessStartInfo startInfo = new ProcessStartInfo(fullPath, splitArgs[1]);
-        Process.Start(startInfo);
+        Process process = new Process() { StartInfo = startInfo };
+        process.Start();
+        process.WaitForExit();
         return;
     }
     Console.Write($"{userInput}: command not found \n");
