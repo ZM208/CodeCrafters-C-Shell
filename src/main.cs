@@ -5,7 +5,7 @@ using System.Diagnostics;
 // Uncomment this line to pass the first stage
 
 // Wait for user input
-string[] AllCommands = { "echo", "type", "exit" };
+string[] AllCommands = { "echo", "type", "exit", "pwd" };
 string[]? Paths = Environment.GetEnvironmentVariable("PATH")?.Split(":"); 
 
 while (true)
