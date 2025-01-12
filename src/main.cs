@@ -64,7 +64,7 @@ void CheckForProgram(string userInput)
     var fullPath = CheckFilePathExist(splitArgs[0]);
     if (!string.IsNullOrWhiteSpace(fullPath))
     {
-        ProcessStartInfo startInfo = new ProcessStartInfo(fullPath, splitArgs[1]);
+        ProcessStartInfo startInfo = new ProcessStartInfo(userInput, splitArgs[1]);
         Process process = new Process() { StartInfo = startInfo };
         process.Start();
         process.WaitForExit();
