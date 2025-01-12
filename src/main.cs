@@ -32,7 +32,11 @@ while (true)
                 CheckCommandPathExists(inputText);                
                 break;
             }
-
+        case "pwd":
+            {
+                Console.WriteLine(Environment.CurrentDirectory);
+                break;
+            }
         default:
             {
                 CheckForProgram(userInput);
