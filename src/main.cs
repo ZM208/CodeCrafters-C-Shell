@@ -5,7 +5,7 @@ using System.Diagnostics;
 // Uncomment this line to pass the first stage
 
 // Wait for user input
-string[] AllCommands = { "echo", "type", "exit", "pwd" };
+string[] AllCommands = { "echo", "type", "exit", "pwd", "cd" };
 string[]? Paths = Environment.GetEnvironmentVariable("PATH")?.Split(":"); 
 
 while (true)
@@ -30,6 +30,11 @@ while (true)
             {
                 var inputText = userInput.Split(' ')[1];
                 CheckCommandPathExists(inputText);                
+                break;
+            }
+        case "cd":
+            {
+                Environment.CurrentDirectory = userInput.Split(' ')[1];
                 break;
             }
         case "pwd":
