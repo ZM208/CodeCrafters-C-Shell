@@ -6,8 +6,8 @@ using System.Diagnostics;
 
 // Wait for user input
 string[] AllCommands = { "echo", "type", "exit", "pwd", "cd" };
-string[]? Paths = Environment.GetEnvironmentVariable("PATH")?.Split(":"); 
-
+string[]? Paths = Environment.GetEnvironmentVariable("PATH")?.Split(":");
+string workingDirectory = Environment.CurrentDirectory;
 while (true)
 {
     Console.Write("$ ");
@@ -34,12 +34,12 @@ while (true)
             }
         case "cd":
             {
-                Environment.CurrentDirectory = userInput.Split(' ')[1];
+                workingDirectory = userInput.Split(' ')[1];
                 break;
             }
         case "pwd":
             {
-                Console.WriteLine(Environment.CurrentDirectory);
+                Console.WriteLine(workingDirectory);
                 break;
             }
         default:
