@@ -34,7 +34,11 @@ while (true)
             }
         case "cd":
             {
-                workingDirectory = userInput.Split(' ')[1];
+                var requestDirectory = userInput.Split(' ')[1];
+                if (Path.Exists(requestDirectory))
+                    workingDirectory = requestDirectory;
+                else
+                    Console.WriteLine($"cd: {workingDirectory}: No such file or directory");
                 break;
             }
         case "pwd":
