@@ -54,46 +54,46 @@ while (true)
                 break;
             }
     }
-
-    void CheckCommandPathExists(string inputText)
-    {
-        if (AllCommands.Contains(inputText))
-        {
-            Console.WriteLine($"{inputText} is a shell builtin");
-            return;
-        }
-        var fullPath = CheckFilePathExist(inputText);
-        if (!string.IsNullOrWhiteSpace(fullPath))
-            Console.WriteLine($"{inputText} is {fullPath}");
-        else
-            Console.WriteLine($"{inputText}: not found");
-    }
-
-    void CheckForProgram(string userInput)
-    {
-        var splitArgs = userInput.Split(" ");
-        var fullPath = CheckFilePathExist(splitArgs[0]);
-        if (!string.IsNullOrWhiteSpace(fullPath))
-        {
-            ProcessStartInfo startInfo = new ProcessStartInfo(splitArgs[0], splitArgs[1]);
-            Process process = new Process() { StartInfo = startInfo };
-            process.Start();
-            process.WaitForExit();
-            return;
-        }
-        Console.WriteLine($"{userInput}: command not found");
-    }
-
-    string CheckFilePathExist(string inputText)
-    {
-        foreach (var path in Paths)
-        {
-            var fullPath = Path.Combine(path, inputText);
-            if (Path.Exists(fullPath))
-            {
-                return fullPath;
-            }
-        }
-        return "";
-    }
 }
+void CheckCommandPathExists(string inputText)
+{
+    if (AllCommands.Contains(inputText))
+    {
+        Console.WriteLine($"{inputText} is a shell builtin");
+        return;
+    }
+    var fullPath = CheckFilePathExist(inputText);
+    if (!string.IsNullOrWhiteSpace(fullPath))
+        Console.WriteLine($"{inputText} is {fullPath}");
+    else
+        Console.WriteLine($"{inputText}: not found");
+}
+
+void CheckForProgram(string userInput)
+{
+    var splitArgs = userInput.Split(" ");
+    var fullPath = CheckFilePathExist(splitArgs[0]);
+    if (!string.IsNullOrWhiteSpace(fullPath))
+    {
+        ProcessStartInfo startInfo = new ProcessStartInfo(splitArgs[0], splitArgs[1]);
+        Process process = new Process() { StartInfo = startInfo };
+        process.Start();
+        process.WaitForExit();
+        return;
+    }
+    Console.WriteLine($"{userInput}: command not found");
+}
+
+string CheckFilePathExist(string inputText)
+{
+    foreach (var path in Paths)
+    {
+        var fullPath = Path.Combine(path, inputText);
+        if (Path.Exists(fullPath))
+        {
+            return fullPath;
+        }
+    }
+    return "";
+}
+
