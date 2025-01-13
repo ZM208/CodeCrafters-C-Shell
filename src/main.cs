@@ -38,7 +38,7 @@ while (true)
                 if (Path.Exists(requestDirectory))
                     workingDirectory = requestDirectory;
                 else
-                    Console.WriteLine($"cd: {workingDirectory}: No such file or directory");
+                    Console.WriteLine($"cd: {requestDirectory}: No such file or directory");
                 break;
             }
         case "pwd":
