@@ -8,11 +8,16 @@ using System.Diagnostics;
 
 string[] AllCommands = { "echo", "type", "exit", "pwd", "cd" };
 string[] Paths = Environment.GetEnvironmentVariable("PATH")?.Split(":") ?? [""];
-string workingDirectory = Environment.CurrentDirectory;
-
+string WorkingDirectory = Environment.CurrentDirectory;
+string test = "wwww/wwwww/wwwwww/wwwww/wwwww";
+Console.WriteLine(test.LastIndexOf('/'));
+foreach(var teste in test.Split('/'))
+{
+    Console.WriteLine(teste);
+}
 while (true)
 {
-    Console.Write("$ ");
+    Console.WriteLine();
     string userInput = Console.ReadLine() ?? "";
     string command = userInput.Split(' ')[0];
     switch (command)
@@ -36,16 +41,12 @@ while (true)
             }
         case "cd":
             {
-                var requestDirectory = userInput.Split(' ')[1];
-                if (Path.Exists(requestDirectory))
-                    workingDirectory = requestDirectory;
-                else
-                    Console.WriteLine($"cd: {requestDirectory}: No such file or directory");
+                ChangeDirectory(userInput.Split(' ')[1]);
                 break;
             }
         case "pwd":
             {
-                Console.WriteLine(workingDirectory);
+                Console.WriteLine(WorkingDirectory);
                 break;
             }
         default:
@@ -97,3 +98,33 @@ string CheckFilePathExist(string inputText)
     return "";
 }
 
+void ChangeDirectory(string requestDirectory)
+{
+    var newDirectory = WorkingDirectory;
+    if (requestDirectory.Contains("../"))
+    {
+        var backAmount = requestDirectory.Split("../").Count();
+        for (int i = 0; i < backAmount; i++)
+        {
+            var lastPath = newDirectory.LastIndexOf('/');
+            newDirectory = newDirectory.Substring(0, lastPath - 1);
+        }
+    }
+    else if (requestDirectory.Contains("./dir"))
+    {
+        var listAllDirectories = Directory.GetDirectories(newDirectory);
+        foreach (var directory in listAllDirectories)
+        {
+            Console.WriteLine(directory);
+        }
+    }
+    else if (requestDirectory.Contains("./")) {
+        requestDirectory = requestDirectory.Replace(".", "");
+        newDirectory = newDirectory + requestDirectory;
+    }
+
+    if (Path.Exists(newDirectory))
+        WorkingDirectory = newDirectory;
+    else
+        Console.WriteLine($"cd: {newDirectory}: No such file or directory");
+}
