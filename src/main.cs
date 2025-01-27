@@ -99,12 +99,10 @@ void ChangeDirectory(string requestDirectory)
     if (requestDirectory.Contains("../"))
     {
         var backAmount = requestDirectory.Split("../").Count();
-        for (int i = 0; i < backAmount; i++)
+        for (int i = 1; i < backAmount; i++)
         {
             var lastPath = newDirectory.LastIndexOf('/');
-            Console.WriteLine(lastPath);
             newDirectory = newDirectory.Substring(0, lastPath);
-            Console.WriteLine(newDirectory);
         }
     }
     else if (requestDirectory.Contains("./dir"))
