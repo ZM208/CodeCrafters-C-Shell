@@ -115,9 +115,12 @@ void ChangeDirectory(string requestDirectory)
     }
     else if (requestDirectory.Contains("./")) {
         requestDirectory = requestDirectory.Replace(".", "");
+        newDirectory = newDirectory + requestDirectory;
+    }
+    else if (requestDirectory.Contains('/'))
+    {
         newDirectory = requestDirectory;
     }
-
     if (Path.Exists(newDirectory))
         WorkingDirectory = newDirectory;
     else
