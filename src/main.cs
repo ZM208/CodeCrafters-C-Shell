@@ -102,7 +102,9 @@ void ChangeDirectory(string requestDirectory)
         for (int i = 0; i < backAmount; i++)
         {
             var lastPath = newDirectory.LastIndexOf('/');
+            Console.WriteLine(lastPath);
             newDirectory = newDirectory.Substring(0, lastPath);
+            Console.WriteLine(newDirectory);
         }
     }
     else if (requestDirectory.Contains("./dir"))
