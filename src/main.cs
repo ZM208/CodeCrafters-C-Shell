@@ -12,7 +12,7 @@ string WorkingDirectory = Environment.CurrentDirectory;
 
 while (true)
 {
-    Console.WriteLine();
+    Console.WriteLine("$ ");
     string userInput = Console.ReadLine() ?? "";
     string command = userInput.Split(' ')[0];
     switch (command)
