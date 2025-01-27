@@ -9,12 +9,7 @@ using System.Diagnostics;
 string[] AllCommands = { "echo", "type", "exit", "pwd", "cd" };
 string[] Paths = Environment.GetEnvironmentVariable("PATH")?.Split(":") ?? [""];
 string WorkingDirectory = Environment.CurrentDirectory;
-string test = "wwww/wwwww/wwwwww/wwwww/wwwww";
-Console.WriteLine(test.LastIndexOf('/'));
-foreach(var teste in test.Split('/'))
-{
-    Console.WriteLine(teste);
-}
+
 while (true)
 {
     Console.WriteLine();
