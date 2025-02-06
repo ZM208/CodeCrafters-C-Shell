@@ -121,6 +121,10 @@ void ChangeDirectory(string requestDirectory)
     {
         newDirectory = requestDirectory;
     }
+    else if (requestDirectory.Contains('~'))
+    {
+        newDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    }
     if (Path.Exists(newDirectory))
         WorkingDirectory = newDirectory;
     else
