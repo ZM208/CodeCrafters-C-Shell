@@ -55,7 +55,8 @@ while (true)
         case "cat":
             {
                 var filePaths = Regex.Split(userInput, "'([^']*)'");
-                Console.WriteLine(filePaths);
+                foreach(var file in filePaths)
+                    Console.WriteLine(file);
                 var allContent = "";
                 foreach(var filePath in filePaths)
                 { 
