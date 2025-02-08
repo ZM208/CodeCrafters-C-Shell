@@ -20,7 +20,11 @@ while (true)
     {
         case "echo":
             {
-                var text = userInput.Replace("echo ", "").Replace("'","");
+                var text = userInput.Replace("echo ", "");
+                if (text.Contains("'"))
+                    text = text.Replace("'", "");
+                else
+                    text = text.Trim();
                 Console.WriteLine(text);
                 break;
             }
