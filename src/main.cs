@@ -15,11 +15,12 @@ while (true)
     Console.Write("$ ");
     string userInput = Console.ReadLine() ?? "";
     string command = userInput.Split(' ')[0];
+
     switch (command)
     {
         case "echo":
             {
-                var text = userInput.Replace("echo ", "");
+                var text = userInput.Replace("echo ", "").Replace("'","");
                 Console.WriteLine(text);
                 break;
             }
