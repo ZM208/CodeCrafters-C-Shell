@@ -2,6 +2,8 @@ using System.Net;
 using System.Net.Sockets;
 using System;
 using System.Diagnostics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Text.RegularExpressions;
 // Uncomment this line to pass the first stage
 
 // Wait for user input
@@ -24,7 +26,7 @@ while (true)
                 if (text.Contains("'"))
                     text = text.Replace("'", "");
                 else
-                    text = text.Replace("  "," ");
+                    text = Regex.Replace(text, @"\s+", " ");
                 Console.WriteLine(text);
                 break;
             }
