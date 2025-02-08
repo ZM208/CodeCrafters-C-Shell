@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 // Wait for user input
 
-string[] AllCommands = { "echo", "type", "exit", "pwd", "cd", "cat" };
+string[] AllCommands = { "echo", "type", "exit", "pwd", "cd" };
 string[] Paths = Environment.GetEnvironmentVariable("PATH")?.Split(":") ?? [""];
 string WorkingDirectory = Environment.CurrentDirectory;
 
