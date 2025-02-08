@@ -24,7 +24,7 @@ while (true)
                 if (text.Contains("'"))
                     text = text.Replace("'", "");
                 else
-                    text = text.Trim();
+                    text = text.Trim(' ');
                 Console.WriteLine(text);
                 break;
             }
