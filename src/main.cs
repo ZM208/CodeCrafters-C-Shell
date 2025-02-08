@@ -54,24 +54,20 @@ while (true)
             }
         case "cat":
             {
-                var filePaths = Regex.Split(userInput, "'([^']*)'");
-                foreach(var file in filePaths)
-                    Console.WriteLine(file);
+                var filePaths = Regex.Split(userInput.Replace("cat", ""), "'([^']*)'");
                 var allContent = "";
                 foreach(var filePath in filePaths)
                 { 
-
-                try
-                {
-                    foreach (string line in File.ReadLines(filePath))
+                    try
                     {
-                        allContent += line;
+                        foreach (string line in File.ReadLines(filePath))
+                        {
+                            allContent += line;
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"cat: error reading {filePath}: {ex.Message}");
-                }
+                    catch (Exception ex)
+                    {
+                    }
                 }
                 Console.WriteLine(allContent);
                 break;
