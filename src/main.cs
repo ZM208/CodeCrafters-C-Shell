@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 // Wait for user input
 
-string[] AllCommands = { "echo", "type", "exit", "pwd", "cd" };
+string[] AllCommands = { "echo", "type", "exit", "pwd", "cd", "cat" };
 string[] Paths = Environment.GetEnvironmentVariable("PATH")?.Split(":") ?? [""];
 string WorkingDirectory = Environment.CurrentDirectory;
 
@@ -28,6 +28,7 @@ while (true)
                 else
                     text = Regex.Replace(text, @"\s+", " ");
                 Console.WriteLine(text);
+                
                 break;
             }
         case "exit":
@@ -49,6 +50,28 @@ while (true)
         case "pwd":
             {
                 Console.WriteLine(WorkingDirectory);
+                break;
+            }
+        case "cat":
+            {
+                var filePaths = Regex.Split(userInput, "'([^']*)'");
+                var allContent = "";
+                foreach(var filePath in filePaths)
+                { 
+
+                try
+                {
+                    foreach (string line in File.ReadLines(filePath))
+                    {
+                        allContent += line;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"cat: error reading {filePath}: {ex.Message}");
+                }
+                }
+                Console.WriteLine(allContent);
                 break;
             }
         default:
