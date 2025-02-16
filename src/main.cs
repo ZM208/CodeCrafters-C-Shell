@@ -2,7 +2,6 @@ using System.Net;
 using System.Net.Sockets;
 using System;
 using System.Diagnostics;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Text.RegularExpressions;
 // Uncomment this line to pass the first stage
 
@@ -23,10 +22,7 @@ while (true)
         case "echo":
             {
                 var text = userInput.Replace("echo ", "");
-                if (text.Contains("'"))
-                    text = text.Replace("'", "");
-                else
-                    text = Regex.Replace(text, @"\s+", " ");
+                text = Regex.Replace(text, @"([""'])(?:\\.|(?!\1).)*\1|(\S) +(?=\S)", " ");
                 Console.WriteLine(text);
                 
                 break;
