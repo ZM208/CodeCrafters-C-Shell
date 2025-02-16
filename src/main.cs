@@ -23,6 +23,7 @@ while (true)
             {
                 var text = userInput.Replace("echo ", "");
                 text = Regex.Replace(text, @"([""'])(?:\\.|(?!\1).)*\1|(\S) +(?=\S)", x => x.Groups[1].Success ? x.Value : x.Groups[2].Value + "");
+                text = text.Replace("\"", "").Replace("\'","");
                 Console.WriteLine(text);
                 
                 break;
