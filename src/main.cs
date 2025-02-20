@@ -24,7 +24,7 @@ while (true)
                 var text = userInput.Replace("echo ", "");
                 string pattern = @"""([^""]*)""|\S+";
                 MatchCollection matches = Regex.Matches(text, pattern);
-                text = string.Join(" ", matches).Replace("\"", "").Replace("\'", "").Trim();
+                text = string.Join(" ", matches).Replace("\'", "").Replace("\"","");
                 Console.WriteLine(text);
                 
                 break;
