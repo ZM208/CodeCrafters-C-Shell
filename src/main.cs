@@ -22,8 +22,9 @@ while (true)
         case "echo":
             {
                 var text = userInput.Replace("echo ", "");
-                text = Regex.Replace(text, @"([""'])(?:\\.|(?!\1).)*\1|(\S)(\s+)(?=\S)", x => x.Groups[1].Success ? x.Value : "");
-                text = text.Replace("\"", "").Replace("\'","");
+                string pattern = @"""([^""]*)""|\S+";
+                MatchCollection matches = Regex.Matches(text, pattern);
+                text = string.Join(" ", matches).Replace("\"", "").Replace("\'", "").Trim();
                 Console.WriteLine(text);
                 
                 break;
