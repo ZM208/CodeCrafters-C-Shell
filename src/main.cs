@@ -3,6 +3,8 @@ using System.Net.Sockets;
 using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using static System.Net.Mime.MediaTypeNames;
+using System.Diagnostics.Tracing;
 // Uncomment this line to pass the first stage
 
 // Wait for user input
@@ -14,17 +16,15 @@ string WorkingDirectory = Environment.CurrentDirectory;
 while (true)
 {
     Console.Write("$ ");
-    string userInput = Console.ReadLine() ?? "";
-    string command = userInput.Split(' ')[0];
+    List<string> userInput = HandleUserInput(Console.ReadLine() ?? "");
+    string command = userInput[0];
 
     switch (command)
     {
         case "echo":
             {
-                var text = userInput.Replace("echo ", "");
-                string pattern = @"""([^""]*)""|\S+";
-                MatchCollection matches = Regex.Matches(text, pattern);
-                text = string.Join(" ", matches).Replace("\'", "").Replace("\"","");
+                userInput.RemoveAt(0);
+                string text = string.Join("", userInput);
                 Console.WriteLine(text);
                 
                 break;
@@ -36,13 +36,13 @@ while (true)
             }
         case "type":
             {
-                var inputText = userInput.Split(' ')[1];
+                var inputText = userInput[1];
                 CheckCommandPathExists(inputText);
                 break;
             }
         case "cd":
             {
-                ChangeDirectory(userInput.Split(' ')[1]);
+                ChangeDirectory(userInput[1]);
                 break;
             }
         case "pwd":
@@ -52,14 +52,14 @@ while (true)
             }
         case "cat":
             {
-                var filePaths = Regex.Split(userInput.Replace("cat", ""), "'([^']*)'");
+                var filePaths = Regex.Split(userInput[1], "'([^']*)'");
                 var allContent = filePaths.Select(File.ReadAllText);            
                 Console.WriteLine(allContent);
                 break;
             }
         default:
             {
-                CheckForProgram(userInput);
+                CheckForProgram(userInput[1]);
                 break;
             }
     }
@@ -142,4 +142,14 @@ void ChangeDirectory(string requestDirectory)
         WorkingDirectory = newDirectory;
     else
         Console.WriteLine($"cd: {newDirectory}: No such file or directory");
+}
+
+List<string> HandleUserInput(string userInput)
+{
+    string pattern = @"""([^""]+?)""|\S+|\s(?!\s)";
+    List<string> filteredInput = [];
+    MatchCollection matches = Regex.Matches(userInput, pattern);
+    foreach (Match match in matches)
+        filteredInput.Add(match.Value.Replace("\"", "").Replace("\'",""));
+    return filteredInput;
 }
