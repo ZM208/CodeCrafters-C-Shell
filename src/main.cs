@@ -23,6 +23,7 @@ while (true)
     {
         case "echo":
             {
+                userInput.RemoveAt(1);
                 userInput.RemoveAt(0);
                 string text = string.Join("", userInput);
                 Console.WriteLine(text);
@@ -36,13 +37,13 @@ while (true)
             }
         case "type":
             {
-                var inputText = userInput[1];
+                var inputText = userInput[2];
                 CheckCommandPathExists(inputText);
                 break;
             }
         case "cd":
             {
-                ChangeDirectory(userInput[1]);
+                ChangeDirectory(userInput[2]);
                 break;
             }
         case "pwd":
@@ -52,14 +53,14 @@ while (true)
             }
         case "cat":
             {
-                var filePaths = Regex.Split(userInput[1], "'([^']*)'");
+                var filePaths = Regex.Split(userInput[2], "'([^']*)'");
                 var allContent = filePaths.Select(File.ReadAllText);            
                 Console.WriteLine(allContent);
                 break;
             }
         default:
             {
-                CheckForProgram(userInput[1]);
+                CheckForProgram(userInput[2]);
                 break;
             }
     }
