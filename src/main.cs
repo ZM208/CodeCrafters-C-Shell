@@ -19,7 +19,7 @@ while (true)
     List<string> userInput = HandleUserInput(Console.ReadLine() ?? "");
     string command = userInput[0];
     if (command == "cat")
-        Console.WriteLine(userInput.Select(x => x));
+        Console.WriteLine(string.Join("---", userInput));
     switch (command)
     {
         case "echo":
