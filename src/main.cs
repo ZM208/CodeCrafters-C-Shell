@@ -53,10 +53,8 @@ while (true)
         case "cat":
             {
                 userInput.RemoveAt(0);
-                userInput.Where(x => !string.IsNullOrWhiteSpace(x));
-                Console.Write(userInput.Count());
-                var allContent = userInput.Select(File.ReadAllText);            
-                Console.WriteLine(string.Join("", allContent));
+                var allContent = userInput.Select(x => File.ReadAllText(x));            
+                Console.WriteLine(allContent);
                 break;
             }
         default:
