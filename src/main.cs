@@ -18,8 +18,6 @@ while (true)
     Console.Write("$ ");
     List<string> userInput = HandleUserInput(Console.ReadLine() ?? "");
     string command = userInput[0];
-    if (command == "cat")
-        Console.WriteLine(string.Join("---", userInput));
     switch (command)
     {
         case "echo":
@@ -54,7 +52,7 @@ while (true)
         case "cat":
             {
                 userInput.RemoveAt(0);
-                var allContent = userInput.Select(x => File.ReadAllText(x));            
+                var allContent = userInput.ToArray().Select(File.ReadAllText);            
                 Console.WriteLine(string.Join("", allContent));
                 break;
             }
