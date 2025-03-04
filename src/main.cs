@@ -18,7 +18,7 @@ while (true)
     Console.Write("$ ");
     List<string> userInput = HandleUserInput(Console.ReadLine() ?? "");
     string command = userInput[0];
-
+    Console.WriteLine(userInput.Select(x => x));
     switch (command)
     {
         case "echo":
