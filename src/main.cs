@@ -23,8 +23,7 @@ while (true)
     {
         case "echo":
             {
-                userInput.RemoveAt(1);
-                userInput.RemoveAt(0);
+                userInput.RemoveRange(0, 2);
                 string text = string.Join("", userInput);
                 Console.WriteLine(text);
                 
