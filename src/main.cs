@@ -54,7 +54,7 @@ while (true)
             {
                 userInput.RemoveAt(0);
                 userInput.Where(x => !string.IsNullOrWhiteSpace(x));
-                Console.Write(userInput.Select(x => x));
+                Console.Write(userInput.Count());
                 var allContent = userInput.Select(File.ReadAllText);            
                 Console.WriteLine(string.Join("", allContent));
                 break;
