@@ -54,7 +54,7 @@ while (true)
             {
                 userInput.RemoveAt(0);
                 var allContent = userInput.Select(x => File.ReadAllText(x));            
-                Console.WriteLine(allContent);
+                Console.WriteLine(string.Join("", allContent));
                 break;
             }
         default:
