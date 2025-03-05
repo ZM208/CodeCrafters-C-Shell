@@ -52,7 +52,8 @@ while (true)
         case "cat":
             {
                 userInput.RemoveAt(0);
-                var allContent = userInput.ToArray().Select(File.ReadAllText);            
+                Console.WriteLine(string.Join("", userInput));
+                var allContent = userInput.Select(File.ReadAllText);            
                 Console.WriteLine(string.Join("", allContent));
                 break;
             }
