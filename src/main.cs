@@ -22,7 +22,7 @@ while (true)
     {
         case "echo":
             {
-                userInput.RemoveRange(0, 2);
+                userInput.RemoveRange(0,2);
                 string text = string.Join("", userInput);
                 Console.WriteLine(text);
                 
@@ -59,7 +59,7 @@ while (true)
             }
         default:
             {
-                CheckForProgram(userInput[2]);
+                CheckForProgram(userInput);
                 break;
             }
     }
@@ -78,9 +78,9 @@ void CheckCommandPathExists(string inputText)
         Console.WriteLine($"{inputText}: not found");
 }
 
-void CheckForProgram(string userInput)
+void CheckForProgram(List<string> userInput)
 {
-    var splitArgs = userInput.Split(" ");
+    var splitArgs = userInput.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
     var fullPath = CheckFilePathExist(splitArgs[0]);
     if (!string.IsNullOrWhiteSpace(fullPath))
     {
