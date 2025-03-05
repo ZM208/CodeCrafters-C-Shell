@@ -80,17 +80,17 @@ void CheckCommandPathExists(string inputText)
 
 void CheckForProgram(List<string> userInput)
 {
-    var splitArgs = userInput.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-    var fullPath = CheckFilePathExist(splitArgs[0]);
+    userInput = userInput.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+    var fullPath = CheckFilePathExist(userInput[0]);
     if (!string.IsNullOrWhiteSpace(fullPath))
     {
-        ProcessStartInfo startInfo = new ProcessStartInfo(splitArgs[0], splitArgs[1]);
+        ProcessStartInfo startInfo = new ProcessStartInfo(userInput[0], userInput[1]);
         Process process = new Process() { StartInfo = startInfo };
         process.Start();
         process.WaitForExit();
         return;
     }
-    Console.WriteLine($"{userInput}: command not found");
+    Console.WriteLine($"{userInput[0]}: command not found");
 }
 
 string CheckFilePathExist(string inputText)
