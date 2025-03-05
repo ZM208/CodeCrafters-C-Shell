@@ -15,7 +15,7 @@ string WorkingDirectory = Environment.CurrentDirectory;
 
 while (true)
 {
-    Console.Write("$ ");
+    Console.Write("$ "); 
     List<string> userInput = HandleUserInput(Console.ReadLine() ?? "");
     string command = userInput[0];
     switch (command)
