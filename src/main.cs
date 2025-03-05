@@ -54,7 +54,7 @@ while (true)
                 userInput.RemoveAt(0);
                 userInput = userInput.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
                 var allContent = userInput.Select(File.ReadAllText);            
-                Console.Write(string.Join("", allContent));
+                Console.WriteLine(string.Join("", allContent));
                 break; 
             }
         default:
@@ -146,7 +146,7 @@ void ChangeDirectory(string requestDirectory)
 
 List<string> HandleUserInput(string userInput)
 {
-    string pattern = @"""([^""]+?)""|\S+|\s(?!\s)";
+    string pattern = @"([""'])(.*?)\1|\S+|\s(?!\s)";
     List<string> filteredInput = [];
     MatchCollection matches = Regex.Matches(userInput, pattern);
     var regexQuotes = new Regex("^[\"'](.*?[^\"']+)[\"']$");
