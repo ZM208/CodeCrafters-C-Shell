@@ -53,8 +53,8 @@ while (true)
             {
                 userInput.RemoveAt(0);
                 userInput = userInput.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-                var allContent = userInput.Select(File.ReadAllText);            
-                Console.WriteLine(string.Join("", allContent));
+                var allContent = userInput.Select(File.ReadAllText);
+                Console.Write(string.Join("", allContent));
                 break; 
             }
         default:
