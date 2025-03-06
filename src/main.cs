@@ -150,7 +150,7 @@ List<string> HandleUserInput(string userInput)
     List<string> filteredInput = [];
     MatchCollection matches = Regex.Matches(userInput, pattern);
     var regexQuotes = new Regex("^[\"'](.*?[^\"']+)[\"']$");
-    var regexEscapeCharacter = new Regex("(?:^|[^\"'\\\\])\\\\(?![\"'])");
+    var regexEscapeCharacter = new Regex("\\\\(?=[^\"']*(?:(?:'[^']*')|(?:\\\"[^\\\"]*\\\"))?[^\"']*$)");
     foreach (Match match in matches)
     {
         string handledSpecialChar = regexEscapeCharacter.Replace(match.Value, "");
