@@ -152,7 +152,7 @@ List<string> HandleUserInput(string userInput)
     var regexQuotes = new Regex("^[\"'](.*?[^\"']+)[\"']$");
     foreach (Match match in matches)
     {
-        filteredInput.Add(regexQuotes.Replace(match.Value, "$1").Replace("\n", " ").Replace("\\", ""));
+        filteredInput.Add(regexQuotes.Replace(match.Value, "$1").Replace("\\n", " ").Replace("\\", ""));
     }
     return filteredInput;
 }
