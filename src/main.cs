@@ -149,10 +149,12 @@ List<string> HandleUserInput(string userInput)
     string pattern = @"([""'])(.*?)\1|\S+|\s(?!\s)";
     List<string> filteredInput = [];
     MatchCollection matches = Regex.Matches(userInput, pattern);
-    var regexQuotes = new Regex("(?:^|[^\"'\\\\])\\\\(?![\"'])");
+    var regexQuotes = new Regex("^[\"'](.*?[^\"']+)[\"']$");
+    var regexEscapeCharacter = new Regex("(?:^|[^\"'\\\\])\\\\(?![\"'])");
     foreach (Match match in matches)
     {
-        filteredInput.Add(regexQuotes.Replace(match.Value, "$1"));
+        string removedQuotes = regexQuotes.Replace(match.Value, "$1");
+        filteredInput.Add(regexEscapeCharacter.Replace(removedQuotes, ""));
     }
     return filteredInput;
 }
