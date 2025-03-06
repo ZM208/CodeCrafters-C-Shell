@@ -146,13 +146,13 @@ void ChangeDirectory(string requestDirectory)
 
 List<string> HandleUserInput(string userInput)
 {
-    string pattern = @"\\.|""([^""]+?)""|\S+|\s(?!\s)";
+    string pattern = @"([""'])(.*?)\1|\S+|\s(?!\s)";
     List<string> filteredInput = [];
     MatchCollection matches = Regex.Matches(userInput, pattern);
     var regexQuotes = new Regex("^[\"'](.*?[^\"']+)[\"']$");
     foreach (Match match in matches)
     {
-        filteredInput.Add(regexQuotes.Replace(match.Value, "$1"));
+        filteredInput.Add(regexQuotes.Replace(match.Value, "$1").Replace("\n", " ").Replace("\\", ""));
     }
     return filteredInput;
 }
