@@ -153,8 +153,8 @@ List<string> HandleUserInput(string userInput)
     var regexEscapeCharacter = new Regex("(?:^|[^\"'\\\\])\\\\(?![\"'])");
     foreach (Match match in matches)
     {
-        string removedQuotes = regexQuotes.Replace(match.Value, "$1");
-        filteredInput.Add(regexEscapeCharacter.Replace(removedQuotes, ""));
+        string handledSpecialChar = regexEscapeCharacter.Replace(match.Value, "");
+        filteredInput.Add(regexQuotes.Replace(handledSpecialChar, "$1"));
     }
     return filteredInput;
 }
