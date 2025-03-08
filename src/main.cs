@@ -158,7 +158,7 @@ List<string> HandleUserInput(string userInput)
     foreach (Match match in matches)
     {
         var removedEscapeCharacters = regexEscapeCharacter.Replace(match.Value, "");
-        filteredInput.Add(regexQuotes.Replace(removedEscapeCharacters, "$1").Replace(DoubleQuotesEscaped, "\\\"").Replace(SingleQuotesEscaped, "\\\'"));
+        filteredInput.Add(regexQuotes.Replace(removedEscapeCharacters, "$1").Replace(DoubleQuotesEscaped, "\"").Replace(SingleQuotesEscaped, "\'"));
     }
     return filteredInput;
 }
