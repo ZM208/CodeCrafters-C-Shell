@@ -12,6 +12,9 @@ using System.Diagnostics.Tracing;
 string[] AllCommands = { "echo", "type", "exit", "pwd", "cd" };
 string[] Paths = Environment.GetEnvironmentVariable("PATH")?.Split(":") ?? [""];
 string WorkingDirectory = Environment.CurrentDirectory;
+// need to replace single quotes and double quotes with unique characters so regex won't try to keep literal value when matching
+const string SingleQuotesEscaped = "[sq]";
+const string DoubleQuotesEscaped = "[dq]";
 
 while (true)
 {
@@ -146,15 +149,15 @@ void ChangeDirectory(string requestDirectory)
 
 List<string> HandleUserInput(string userInput)
 {
+    userInput = userInput.Replace("\\\"", DoubleQuotesEscaped).Replace("\\\'", SingleQuotesEscaped);
     string pattern = @"\\.|([""'])(.*?)\1|\S+|\s(?!\s)";
     List<string> filteredInput = [];
     MatchCollection matches = Regex.Matches(userInput, pattern);
     var regexQuotes = new Regex("^[\"'](.*?[^\"']+)[\"']$");
-    var regexEscapeCharacter = new Regex("\\\\(?=[^\"']*(?:(?:'[^']*')|(?:\\\"[^\\\"]*\\\"))?[^\"']*$)");
+    var regexEscapeCharacter = new Regex("");
     foreach (Match match in matches)
-    {
-        string handledSpecialChar = regexEscapeCharacter.Replace(match.Value, "");
-        filteredInput.Add(regexQuotes.Replace(handledSpecialChar, "$1"));
+    { 
+        filteredInput.Add(regexQuotes.Replace(match.Value, "$1").Replace(DoubleQuotesEscaped, "\\\"").Replace(SingleQuotesEscaped, "\\\'"));
     }
     return filteredInput;
 }
