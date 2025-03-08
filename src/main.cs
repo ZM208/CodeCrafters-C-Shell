@@ -150,14 +150,15 @@ void ChangeDirectory(string requestDirectory)
 List<string> HandleUserInput(string userInput)
 {
     userInput = userInput.Replace("\\\"", DoubleQuotesEscaped).Replace("\\\'", SingleQuotesEscaped);
-    string pattern = @"\\.|([""'])(.*?)\1|\S+|\s(?!\s)";
+    string pattern = @"\\.|([""'])(.*?)\1|\S+|\s(?!\s)"; // main pattern to split up into aruguments
     List<string> filteredInput = [];
     MatchCollection matches = Regex.Matches(userInput, pattern);
-    var regexQuotes = new Regex("^[\"'](.*?[^\"']+)[\"']$");
-    var regexEscapeCharacter = new Regex("");
+    var regexQuotes = new Regex("^[\"'](.*?[^\"']+)[\"']$"); // removing quotes before returning list
+    var regexEscapeCharacter = new Regex("\\\\(?=[^\"']*(?:[\"\"'][^\"']*[\"\"'])*[^\"']*$)"); // removes escape characters outside of quotes
     foreach (Match match in matches)
-    { 
-        filteredInput.Add(regexQuotes.Replace(match.Value, "$1").Replace(DoubleQuotesEscaped, "\\\"").Replace(SingleQuotesEscaped, "\\\'"));
+    {
+        var removedEscapeCharacters = regexEscapeCharacter.Replace(match.Value, "");
+        filteredInput.Add(regexQuotes.Replace(removedEscapeCharacters, "$1").Replace(DoubleQuotesEscaped, "\\\"").Replace(SingleQuotesEscaped, "\\\'"));
     }
     return filteredInput;
 }
