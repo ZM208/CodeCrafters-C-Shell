@@ -149,12 +149,12 @@ void ChangeDirectory(string requestDirectory)
 
 List<string> HandleUserInput(string userInput)
 {
-    userInput = userInput.Replace("\\\"", DoubleQuotesEscaped).Replace("\\\'", SingleQuotesEscaped);
+    userInput = userInput.Replace("\\\"", "\\" + DoubleQuotesEscaped).Replace("\\\'", "\\" + SingleQuotesEscaped);
     string pattern = @"\\.|([""'])(.*?)\1|\S+|\s(?!\s)"; // main pattern to split up into aruguments
     List<string> filteredInput = [];
     MatchCollection matches = Regex.Matches(userInput, pattern);
     var regexQuotes = new Regex("^[\"'](.*?[^\"']+)[\"']$"); // removing quotes before returning list
-    var regexEscapeCharacter = new Regex("\\\\(?=[^\"']*(?:[\"\"'][^\"']*[\"\"'])*[^\"']*$)"); // removes escape characters outside of quotes
+    var regexEscapeCharacter = new Regex("\\\\(?=(?:[^\"']*(?:\"[^\"']*\"|'[^\"']*'))*[^\"']*$)"); // removes escape characters outside of quotes
     foreach (Match match in matches)
     {
         var removedEscapeCharacters = regexEscapeCharacter.Replace(match.Value, "");
