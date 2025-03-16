@@ -15,7 +15,7 @@ string WorkingDirectory = Environment.CurrentDirectory;
 // need to replace single quotes and double quotes with unique characters so regex won't try to keep literal value when matching
 const string SingleQuotesEscaped = "[sq]";
 const string DoubleQuotesEscaped = "[dq]";
-char[] EscapedSpecialCharacters = { '\"', '\'', '\\', 'n' };
+char[] EscapedSpecialCharacters = { '\"', '\'', '\\' };
 while (true)
 {
     Console.Write("$ "); 
