@@ -154,11 +154,43 @@ List<string> HandleUserInput(string userInput)
     List<string> filteredInput = [];
     MatchCollection matches = Regex.Matches(userInput, pattern);
     var regexQuotes = new Regex("^[\"'](.*)[\"']$"); // removing quotes before returning list
-    var regexEscapeCharacter = new Regex(@"\\(?!(['""]).*?\1)"); // removes escape characters outside of quotes
     foreach (Match match in matches)
     {
-        var removedEscapeCharacters = regexEscapeCharacter.Replace(match.Value, @"\");
-        filteredInput.Add(regexQuotes.Replace(removedEscapeCharacters, "$1").Replace(DoubleQuotesEscaped, "\"").Replace(SingleQuotesEscaped, "\'").Replace("\\\\", "\\"));
+        var removedEscapeCharacters = FilterUserInput(match.Value);
+        filteredInput.Add(regexQuotes.Replace(removedEscapeCharacters, "$1"));
     }
     return filteredInput;
+}
+
+string FilterUserInput(string userInput)
+{
+    userInput = userInput.Replace(DoubleQuotesEscaped, "\"").Replace(SingleQuotesEscaped, "\'");
+    string result = "";
+    bool doubleQuotes = false;
+    bool singleQuotes = false;
+    bool escapeQuotes = false;
+    foreach (var character in userInput)
+    { 
+        if (escapeQuotes)
+        {
+            escapeQuotes = !escapeQuotes;
+            result += character;
+            continue;
+        }
+        else if (character == '\'' && !doubleQuotes)
+        {
+            singleQuotes = !singleQuotes;
+        }
+        else if (character == '\\' && !singleQuotes)
+        {
+            escapeQuotes = !escapeQuotes;
+            continue;
+        }
+        else if(character == '"' && !singleQuotes)
+        {
+            doubleQuotes = !doubleQuotes;
+        }
+        result += character;
+    }
+    return result;
 }
