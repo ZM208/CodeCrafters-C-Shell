@@ -149,7 +149,7 @@ void ChangeDirectory(string requestDirectory)
 
 List<string> HandleUserInput(string userInput)
 {
-    bool catMode = userInput.Contains(" cat ");
+    bool catMode = userInput.Contains("cat ");
     userInput = userInput.Replace("\\\"", "\\" + DoubleQuotesEscaped).Replace("\\\'", "\\" + SingleQuotesEscaped);
     string pattern = @"([""'""])(.+?)\1|\S+|\s(?!\s)"; // main pattern to split up into aruguments
     List<string> filteredInput = [];
