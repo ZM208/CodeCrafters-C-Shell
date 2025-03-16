@@ -174,7 +174,7 @@ string FilterUserInput(string userInput)
         if (escapeQuotes)
         {
             escapeQuotes = !escapeQuotes;
-            if (!EscapedSpecialCharacters.Contains(character) || doubleQuotes || singleQuotes)
+            if (!EscapedSpecialCharacters.Contains(character) || singleQuotes)
                 result += '\\';
             result += character;
             continue;
