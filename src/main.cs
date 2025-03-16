@@ -13,8 +13,8 @@ string[] AllCommands = { "echo", "type", "exit", "pwd", "cd" };
 string[] Paths = Environment.GetEnvironmentVariable("PATH")?.Split(":") ?? [""];
 string WorkingDirectory = Environment.CurrentDirectory;
 // need to replace single quotes and double quotes with unique characters so regex won't try to keep literal value when matching
-const string SingleQuotesEscaped = "\\[sq]";
-const string DoubleQuotesEscaped = "\\[dq]";
+const string SingleQuotesEscaped = "[sq]";
+const string DoubleQuotesEscaped = "[dq]";
 char[] EscapedSpecialCharacters = { '\"', '\'', '\\' };
 while (true)
 {
@@ -149,7 +149,7 @@ void ChangeDirectory(string requestDirectory)
 
 List<string> HandleUserInput(string userInput)
 {
-    userInput = userInput.Replace("\\\"", DoubleQuotesEscaped).Replace("\\\'", SingleQuotesEscaped);
+    userInput = userInput.Replace("\\\"", "\\" + DoubleQuotesEscaped).Replace("\\\'", "\\" + SingleQuotesEscaped);
     string pattern = @"([""'""])(.+?)\1|\S+|\s(?!\s)"; // main pattern to split up into aruguments
     List<string> filteredInput = [];
     MatchCollection matches = Regex.Matches(userInput, pattern);
