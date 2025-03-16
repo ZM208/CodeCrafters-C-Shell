@@ -179,7 +179,7 @@ string FilterUserInput(string userInput)
             result += character;
             continue;
         }
-        else if (character == '\'' && !doubleQuotes)
+        else if (character == '\'')
             singleQuotes = !singleQuotes;
         
         else if (character == '\\' && !singleQuotes)
