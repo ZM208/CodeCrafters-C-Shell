@@ -149,15 +149,16 @@ void ChangeDirectory(string requestDirectory)
 
 List<string> HandleUserInput(string userInput)
 {
-    bool catMode = userInput.Contains("cat ");
     userInput = userInput.Replace("\\\"", "\\" + DoubleQuotesEscaped).Replace("\\\'", "\\" + SingleQuotesEscaped);
     string pattern = @"([""'""])(.+?)\1|\S+|\s(?!\s)"; // main pattern to split up into aruguments
     List<string> filteredInput = [];
     MatchCollection matches = Regex.Matches(userInput, pattern);
+    bool catMode = matches[0].Value == "cat" || !AllCommands.Contains(matches[0].Value); // won't replace escape chars in double quotes for files related commands
+
     var regexQuotes = new Regex("^[\"'](.*)[\"']$"); // removing quotes before returning list
     foreach (Match match in matches)
     {
-        var removedEscapeCharacters = FilterUserInput(match.Value, true);
+        var removedEscapeCharacters = FilterUserInput(match.Value, catMode);
         filteredInput.Add(regexQuotes.Replace(removedEscapeCharacters, "$1"));
     }
     return filteredInput;
