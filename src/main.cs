@@ -169,12 +169,13 @@ string FilterUserInput(string userInput)
     bool doubleQuotes = false;
     bool singleQuotes = false;
     bool escapeQuotes = false;
+    bool catMode = userInput == "cat";
     foreach (var character in userInput)
     { 
         if (escapeQuotes)
         {
             escapeQuotes = !escapeQuotes;
-            if (!EscapedSpecialCharacters.Contains(character) || singleQuotes)
+            if (!EscapedSpecialCharacters.Contains(character) || catMode)
                 result += '\\';
             result += character;
             continue;
