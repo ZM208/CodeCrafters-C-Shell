@@ -149,6 +149,7 @@ void ChangeDirectory(string requestDirectory)
 
 List<string> HandleUserInput(string userInput)
 {
+    bool catMode = userInput.Contains(" cat ");
     userInput = userInput.Replace("\\\"", "\\" + DoubleQuotesEscaped).Replace("\\\'", "\\" + SingleQuotesEscaped);
     string pattern = @"([""'""])(.+?)\1|\S+|\s(?!\s)"; // main pattern to split up into aruguments
     List<string> filteredInput = [];
@@ -156,26 +157,25 @@ List<string> HandleUserInput(string userInput)
     var regexQuotes = new Regex("^[\"'](.*)[\"']$"); // removing quotes before returning list
     foreach (Match match in matches)
     {
-        var removedEscapeCharacters = FilterUserInput(match.Value);
+        var removedEscapeCharacters = FilterUserInput(match.Value, catMode);
         filteredInput.Add(regexQuotes.Replace(removedEscapeCharacters, "$1"));
     }
     return filteredInput;
 }
 
-string FilterUserInput(string userInput)
+string FilterUserInput(string userInput, bool catMode)
 {
     userInput = userInput.Replace(DoubleQuotesEscaped, "\"").Replace(SingleQuotesEscaped, "\'");
     string result = "";
     bool doubleQuotes = false;
     bool singleQuotes = false;
     bool escapeQuotes = false;
-    bool catMode = userInput == "cat";
     foreach (var character in userInput)
     { 
         if (escapeQuotes)
         {
             escapeQuotes = !escapeQuotes;
-            if (!EscapedSpecialCharacters.Contains(character) || catMode)
+            if ((!EscapedSpecialCharacters.Contains(character)) || catMode)
                 result += '\\';
             result += character;
             continue;
