@@ -162,7 +162,7 @@ List<string> HandleUserInput(string userInput)
     }
     return filteredInput;
 }
-
+ 
 string FilterUserInput(string userInput, bool catMode)
 {
     userInput = userInput.Replace(DoubleQuotesEscaped, "\"").Replace(SingleQuotesEscaped, "\'");
