@@ -157,7 +157,7 @@ List<string> HandleUserInput(string userInput)
     var regexQuotes = new Regex("^[\"'](.*)[\"']$"); // removing quotes before returning list
     foreach (Match match in matches)
     {
-        var removedEscapeCharacters = FilterUserInput(match.Value, catMode);
+        var removedEscapeCharacters = FilterUserInput(match.Value, true);
         filteredInput.Add(regexQuotes.Replace(removedEscapeCharacters, "$1"));
     }
     return filteredInput;
