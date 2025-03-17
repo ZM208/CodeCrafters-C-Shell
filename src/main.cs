@@ -84,10 +84,13 @@ void CheckCommandPathExists(string inputText)
 void CheckForProgram(List<string> userInput)
 {
     userInput = userInput.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-    var fullPath = CheckFilePathExist(userInput[0]);
+    var fileName = userInput[0];
+    userInput.RemoveAt(0);
+    var args = string.Join("", userInput);
+    var fullPath = CheckFilePathExist(fileName);
     if (!string.IsNullOrWhiteSpace(fullPath))
     {
-        ProcessStartInfo startInfo = new ProcessStartInfo(userInput[0], userInput[1]);
+        ProcessStartInfo startInfo = new ProcessStartInfo(fileName, args);
         Process process = new Process() { StartInfo = startInfo  };
         process.StartInfo.RedirectStandardOutput = userInput.Contains("<");
         process.Start();
@@ -95,7 +98,7 @@ void CheckForProgram(List<string> userInput)
         process.WaitForExit();
         return;
     }
-    Console.WriteLine($"{userInput[0]}: command not found");
+    Console.WriteLine($"{fileName}: command not found");
 }
 
 string CheckFilePathExist(string inputText)
