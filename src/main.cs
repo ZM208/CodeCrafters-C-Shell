@@ -88,7 +88,8 @@ void CheckForProgram(List<string> userInput)
     if (!string.IsNullOrWhiteSpace(fullPath))
     {
         ProcessStartInfo startInfo = new ProcessStartInfo(userInput[0], userInput[1]);
-        Process process = new Process() { StartInfo = startInfo };
+        Process process = new Process() { StartInfo = startInfo  };
+        process.StartInfo.RedirectStandardOutput = userInput.Contains("<");
         process.Start();
         process.WaitForExit();
         return;
