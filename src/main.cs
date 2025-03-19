@@ -89,7 +89,8 @@ void CheckForProgram(List<string> userInput)
     var args = string.Join(" ", userInput).Replace("<", "1<");
     if (userInput.Contains(">"))
     {
-        using (StreamWriter writer = new StreamWriter(userInput[userInput.Count - 1]))
+        FileStream fs = new FileStream(userInput[userInput.Count - 1], FileMode.Create);
+        using (StreamWriter writer = new StreamWriter(fs))
         {
             var originalOutput = Console.Out;
             Console.SetOut(writer);
