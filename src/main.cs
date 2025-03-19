@@ -84,14 +84,19 @@ void CheckCommandPathExists(string inputText)
 void CheckForProgram(List<string> userInput)
 {
     userInput = userInput.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+    if (userInput.Contains(">"))
+    {
+        using (StreamWriter writer = new StreamWriter(userInput[userInput.Count - 1]))
+        {
+            Console.SetOut(writer);
+            int v = userInput.IndexOf(">");
+            userInput.RemoveRange(v, userInput.Count - v);
+        }
+    }
     var fileName = userInput[0];
     userInput.RemoveAt(0);
     var args = string.Join(" ", userInput).Replace("<", "1<");
     var fullPath = CheckFilePathExist(fileName);
-    if (args.Contains("<") && !args.Contains("1<"))
-    {
-        var test = File.Create(WorkingDirectory + userInput[userInput.Count - 1]);
-    }
     if (!string.IsNullOrWhiteSpace(fullPath))
     {
         ProcessStartInfo startInfo = new ProcessStartInfo(fileName, args);
