@@ -87,6 +87,7 @@ void CheckForProgram(List<string> userInput)
     var fileName = userInput[0];
     userInput.RemoveAt(0);
     var args = string.Join(" ", userInput).Replace("<", "1<");
+    var fullPath = CheckFilePathExist(fileName);
     if (userInput.Contains(">"))
     {
         FileStream fs = new FileStream(userInput[userInput.Count - 1], FileMode.Create);
@@ -96,12 +97,11 @@ void CheckForProgram(List<string> userInput)
             Console.SetOut(writer);
             int v = userInput.IndexOf(">");
             userInput.RemoveRange(v, userInput.Count - v);
-            StartProcess(fileName, args);
+            StartProcess(fullPath, args);
             Console.SetOut(originalOutput);
             return;
         }
     }
-    var fullPath = CheckFilePathExist(fileName);
     if (!string.IsNullOrWhiteSpace(fullPath))
     {
         StartProcess(fullPath, args);
