@@ -91,10 +91,12 @@ void CheckForProgram(List<string> userInput)
     {
         using (StreamWriter writer = new StreamWriter(userInput[userInput.Count - 1]))
         {
+            var originalOutput = Console.Out;
             Console.SetOut(writer);
             int v = userInput.IndexOf(">");
             userInput.RemoveRange(v, userInput.Count - v);
             StartProcess(fileName, args);
+            Console.SetOut(originalOutput);
             return;
         }
     }
