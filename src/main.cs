@@ -86,7 +86,7 @@ void CheckForProgram(List<string> userInput)
     userInput = userInput.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
     var fileName = userInput[0];
     userInput.RemoveAt(0);
-    var args = string.Join(" ", userInput);
+    var args = string.Join(" ", userInput).Replace("<", "1<");
     var fullPath = CheckFilePathExist(fileName);
     if (!string.IsNullOrWhiteSpace(fullPath))
     {
