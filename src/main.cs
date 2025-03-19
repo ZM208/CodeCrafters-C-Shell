@@ -84,6 +84,9 @@ void CheckCommandPathExists(string inputText)
 void CheckForProgram(List<string> userInput)
 {
     userInput = userInput.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+    var fileName = userInput[0];
+    userInput.RemoveAt(0);
+    var args = string.Join(" ", userInput).Replace("<", "1<");
     if (userInput.Contains(">"))
     {
         using (StreamWriter writer = new StreamWriter(userInput[userInput.Count - 1]))
@@ -91,22 +94,14 @@ void CheckForProgram(List<string> userInput)
             Console.SetOut(writer);
             int v = userInput.IndexOf(">");
             userInput.RemoveRange(v, userInput.Count - v);
+            StartProcess(fileName, args);
+            return;
         }
     }
-    var fileName = userInput[0];
-    userInput.RemoveAt(0);
-    var args = string.Join(" ", userInput).Replace("<", "1<");
     var fullPath = CheckFilePathExist(fileName);
     if (!string.IsNullOrWhiteSpace(fullPath))
     {
-        ProcessStartInfo startInfo = new ProcessStartInfo(fileName, args);
-        Process process = new Process() { StartInfo = startInfo  };
-        process.StartInfo.UseShellExecute = false;
-        process.StartInfo.RedirectStandardOutput = true;
-        process.StartInfo.RedirectStandardError = true;
-        process.Start();
-        string output = process.StandardOutput.ReadToEnd();
-        process.WaitForExit();
+        StartProcess(fullPath, args);
         return;
     }
     Console.WriteLine($"{fileName}: command not found");
@@ -210,4 +205,17 @@ string FilterUserInput(string userInput, bool catMode)
         result += character;
     }
     return result;
+}
+
+void StartProcess(string fileName, string args)
+{
+    ProcessStartInfo startInfo = new ProcessStartInfo(fileName, args);
+    Process process = new Process() { StartInfo = startInfo };
+    process.StartInfo.UseShellExecute = false;
+    process.StartInfo.RedirectStandardOutput = true;
+    process.StartInfo.RedirectStandardError = true;
+    process.Start();
+    string output = process.StandardOutput.ReadToEnd();
+    process.WaitForExit();
+    return;
 }
