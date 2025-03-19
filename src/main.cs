@@ -89,7 +89,9 @@ void CheckForProgram(List<string> userInput)
     var args = string.Join(" ", userInput).Replace("<", "1<");
     var fullPath = CheckFilePathExist(fileName);
     if (args.Contains("<") && !args.Contains("1<"))
-        File.Create(userInput[userInput.Count - 1]);
+    {
+        var test = File.Create(WorkingDirectory + userInput[userInput.Count - 1]);
+    }
     if (!string.IsNullOrWhiteSpace(fullPath))
     {
         ProcessStartInfo startInfo = new ProcessStartInfo(fileName, args);
