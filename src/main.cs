@@ -92,6 +92,7 @@ void CheckForProgram(List<string> userInput)
     {
         ProcessStartInfo startInfo = new ProcessStartInfo(fileName, args);
         Process process = new Process() { StartInfo = startInfo  };
+        process.StartInfo.UseShellExecute = false;
         process.StartInfo.RedirectStandardOutput = userInput.Contains("<");
         process.Start();
         string output = process.StandardOutput.ReadToEnd();
