@@ -90,10 +90,11 @@ void CheckForProgram(List<string> userInput)
     var fullPath = CheckFilePathExist(fileName);
     if (!string.IsNullOrWhiteSpace(fullPath))
     {
+        Console.WriteLine(args);
         ProcessStartInfo startInfo = new ProcessStartInfo(fileName, args);
         Process process = new Process() { StartInfo = startInfo  };
         process.StartInfo.UseShellExecute = false;
-        process.StartInfo.RedirectStandardOutput = userInput.Contains("<");
+        process.StartInfo.RedirectStandardOutput = true;
         process.Start();
         string output = process.StandardOutput.ReadToEnd();
         process.WaitForExit();
