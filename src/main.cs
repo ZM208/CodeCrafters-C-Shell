@@ -91,16 +91,15 @@ void CheckForProgram(List<string> userInput)
     if (userInput.Contains(">"))
     {
         FileStream fs = new FileStream(userInput[userInput.Count - 1], FileMode.Create);
-        using (StreamWriter writer = new StreamWriter(fs))
-        {
-            var originalOutput = Console.Out;
-            Console.SetOut(writer);
-            int v = userInput.IndexOf(">");
-            userInput.RemoveRange(v, userInput.Count - v);
-            StartProcess(fullPath, args);
-            Console.SetOut(originalOutput);
-            return;
-        }
+        StreamWriter writer = new StreamWriter(fs); 
+        var originalOutput = Console.Out;
+        Console.SetOut(writer);
+        int v = userInput.IndexOf(">");
+        userInput.RemoveRange(v, userInput.Count - v);
+        StartProcess(fullPath, args);
+        Console.SetOut(originalOutput);
+        return;
+        
     }
     if (!string.IsNullOrWhiteSpace(fullPath))
     {
