@@ -98,8 +98,8 @@ void CheckForProgram(List<string> userInput)
         userInput.RemoveRange(v, userInput.Count - v);
         StartProcess(fullPath, args);
         Console.SetOut(originalOutput);
-        fs.Close();
         writer.Close();
+        fs.Close();
         return;
         
     }
