@@ -91,7 +91,7 @@ void CheckForProgram(List<string> userInput)
     if (userInput.Contains(">"))
     {
         FileStream fs = new FileStream(userInput[userInput.Count - 1], FileMode.Create);
-        StreamWriter writer = new StreamWriter(fs); 
+        StreamWriter writer = new StreamWriter(fs) { AutoFlush = true}; 
         var originalOutput = Console.Out;
         Console.SetOut(writer);
         int v = userInput.IndexOf(">");
