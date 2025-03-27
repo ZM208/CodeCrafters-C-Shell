@@ -216,6 +216,9 @@ void StartProcess(string fileName, string args)
     ProcessStartInfo startInfo = new ProcessStartInfo(fileName, args);
     Process process = new Process() { StartInfo = startInfo };
     process.StartInfo.UseShellExecute = false;
+    process.StartInfo.RedirectStandardOutput = true;
+    process.StartInfo.RedirectStandardError = true;
+    process.OutputDataReceived += (_, dataReceived) => Console.WriteLine(dataReceived.Data);
     process.Start();
     string output = process.StandardOutput.ReadToEnd();
     process.WaitForExit();
