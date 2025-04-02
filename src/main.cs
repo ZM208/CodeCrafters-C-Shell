@@ -224,7 +224,7 @@ void StartProcess(string fileName, string args, StreamWriter stream = null)
         process.OutputDataReceived += (_, dataReceived) => stream.Write(dataReceived.Data);
     }
     process.Start();
-    string output = process.StandardOutput.ReadToEnd();
+    process.BeginOutputReadLine();
     process.WaitForExit();
     return;
 }
