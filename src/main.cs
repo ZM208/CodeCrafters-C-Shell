@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using static System.Net.Mime.MediaTypeNames;
 using System.Diagnostics.Tracing;
+using System.Text;
 // Uncomment this line to pass the first stage
 
 // Wait for user input
@@ -91,12 +92,12 @@ void CheckForProgram(List<string> userInput)
     if (userInput.Contains(">"))
     {
         FileStream fs = new FileStream(userInput[userInput.Count - 1], FileMode.Create);
-        StreamWriter writer = new StreamWriter(fs) { AutoFlush = true}; 
+        StreamWriter writer = new StreamWriter(fs, new UTF8Encoding(true)) { AutoFlush = true}; 
         var originalOutput = Console.Out;
         Console.SetOut(writer);
         int v = userInput.IndexOf(">");
         userInput.RemoveRange(v, userInput.Count - v);
-        StartProcess(fullPath, args);
+        StartProcess(fullPath, args, writer);
         Console.SetOut(originalOutput);
         writer.Close();
         fs.Close();
@@ -211,14 +212,17 @@ string FilterUserInput(string userInput, bool catMode)
     return result;
 }
 
-void StartProcess(string fileName, string args)
+void StartProcess(string fileName, string args, StreamWriter stream = null)
 {
     ProcessStartInfo startInfo = new ProcessStartInfo(fileName, args);
     Process process = new Process() { StartInfo = startInfo };
     process.StartInfo.UseShellExecute = false;
     process.StartInfo.RedirectStandardOutput = true;
     process.StartInfo.RedirectStandardError = true;
-    process.OutputDataReceived += (_, dataReceived) => Console.WriteLine(dataReceived.Data);
+    if (stream != null)
+    {
+        process.OutputDataReceived += (_, dataReceived) => stream.Write(dataReceived.Data);
+    }
     process.Start();
     string output = process.StandardOutput.ReadToEnd();
     process.WaitForExit();
