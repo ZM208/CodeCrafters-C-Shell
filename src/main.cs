@@ -58,7 +58,7 @@ while (true)
                 userInput.RemoveAt(0);
                 userInput = userInput.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
                 var allContent = userInput.Select(File.ReadAllText);
-                Console.Write(string.Join("", allContent));
+                Console.WriteLine(string.Join("", allContent));
                 break; 
             }
         default:
@@ -225,6 +225,6 @@ void StartProcess(string fileName, string args, StreamWriter stream = null)
     process.Start();
     process.BeginOutputReadLine();
     process.WaitForExit();
-    Console.Write(output.ToString());
+    Console.Write(output.ToString().Trim());
     return;
 }
