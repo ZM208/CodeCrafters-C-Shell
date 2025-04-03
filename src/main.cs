@@ -222,10 +222,9 @@ void StartProcess(string fileName, string args, StreamWriter stream = null)
     {
         process.OutputDataReceived += (_, dataReceived) => output.AppendLine(dataReceived.Data);
     }
-    Console.WriteLine(output);
     process.Start();
     process.BeginOutputReadLine();
-    Console.Write(output.ToString());
     process.WaitForExit();
+    Console.Write(output.ToString());
     return;
 }
