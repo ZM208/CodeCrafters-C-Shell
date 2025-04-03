@@ -217,12 +217,14 @@ void StartProcess(string fileName, string args, StreamWriter stream = null)
     process.StartInfo.UseShellExecute = false;
     process.StartInfo.RedirectStandardOutput = true;
     process.StartInfo.RedirectStandardError = false;
+    StringBuilder output = new StringBuilder();
     if (stream != null)
     {
-        process.OutputDataReceived += (_, dataReceived) => stream.WriteLine(dataReceived.Data);
+        process.OutputDataReceived += (_, dataReceived) => output.Append(dataReceived.Data);
     }
     process.Start();
     process.BeginOutputReadLine();
+    Console.Write(output.ToString());
     process.WaitForExit();
     return;
 }
