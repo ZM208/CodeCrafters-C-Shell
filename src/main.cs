@@ -219,7 +219,7 @@ void StartProcess(string fileName, string args, StreamWriter stream = null)
     process.StartInfo.RedirectStandardError = false;
     if (stream != null)
     {
-        process.OutputDataReceived += (_, dataReceived) => Console.Write("\n" +dataReceived.Data);
+        process.OutputDataReceived += (_, dataReceived) => stream.WriteLine(dataReceived.Data);
     }
     process.Start();
     process.BeginOutputReadLine();
