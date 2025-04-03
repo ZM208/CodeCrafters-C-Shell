@@ -220,7 +220,7 @@ void StartProcess(string fileName, string args, StreamWriter stream = null)
     StringBuilder output = new StringBuilder();
     if (stream != null)
     {
-        process.OutputDataReceived += (_, dataReceived) => output.Append(dataReceived.Data);
+        process.OutputDataReceived += (_, dataReceived) => output.AppendLine(dataReceived.Data);
     }
     process.Start();
     process.BeginOutputReadLine();
