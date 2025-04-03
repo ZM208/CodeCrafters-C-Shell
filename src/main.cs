@@ -88,7 +88,6 @@ void CheckForProgram(List<string> userInput)
     var fileName = userInput[0];
     userInput.RemoveAt(0);
     var fullPath = CheckFilePathExist(fileName);
-    Console.WriteLine(fullPath);
     if (userInput.Contains(">"))
     {
         FileStream fs = new FileStream(userInput[userInput.Count - 1], FileMode.Create);
