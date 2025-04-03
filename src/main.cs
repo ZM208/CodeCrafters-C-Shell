@@ -218,7 +218,7 @@ void StartProcess(string fileName, string args, StreamWriter stream = null)
     Process process = new Process() { StartInfo = startInfo };
     process.StartInfo.UseShellExecute = false;
     process.StartInfo.RedirectStandardOutput = true;
-    process.StartInfo.RedirectStandardError = true;
+    process.StartInfo.RedirectStandardError = false;
     if (stream != null)
     {
         process.OutputDataReceived += (_, dataReceived) => stream.WriteLine(dataReceived.Data);
