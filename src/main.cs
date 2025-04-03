@@ -94,7 +94,7 @@ void CheckForProgram(List<string> userInput)
         FileStream fs = new FileStream(userInput[userInput.Count - 1], FileMode.Create);
         StreamWriter writer = new StreamWriter(fs, new UTF8Encoding(true)) { AutoFlush = true}; 
         var originalOutput = Console.Out;
-        Console.SetOut(writer);
+        //Console.SetOut(writer);
         int v = userInput.IndexOf(">");
         userInput.RemoveRange(v, userInput.Count - v);
         StartProcess(fullPath, args, writer);
@@ -221,7 +221,7 @@ void StartProcess(string fileName, string args, StreamWriter stream = null)
     process.StartInfo.RedirectStandardError = false;
     if (stream != null)
     {
-        process.OutputDataReceived += (_, dataReceived) => stream.WriteLine(dataReceived.Data);
+        process.OutputDataReceived += (_, dataReceived) => Console.WriteLine(dataReceived.Data);
     }
     process.Start();
     process.BeginOutputReadLine();
