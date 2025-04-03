@@ -87,19 +87,16 @@ void CheckForProgram(List<string> userInput)
     userInput = userInput.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
     var fileName = userInput[0];
     userInput.RemoveAt(0);
-    var args = string.Join(" ", userInput).Replace("<", "1<");
     var fullPath = CheckFilePathExist(fileName);
     Console.WriteLine(fullPath);
     if (userInput.Contains(">"))
     {
         FileStream fs = new FileStream(userInput[userInput.Count - 1], FileMode.Create);
-        userInput.RemoveRange(userInput.Count - 2, 2);
         StreamWriter writer = new StreamWriter(fs, new UTF8Encoding(true)) { AutoFlush = true}; 
         var originalOutput = Console.Out;
         //Console.SetOut(writer);
-        int v = userInput.IndexOf(">");
-        userInput.RemoveRange(v, userInput.Count - v);
-        StartProcess(fullPath, args, writer);
+        userInput.RemoveRange(userInput.Count - 2, 2);
+        StartProcess(fullPath, string.Join(" ", userInput), writer);
         Console.SetOut(originalOutput);
         writer.Close();
         fs.Close();
@@ -108,7 +105,7 @@ void CheckForProgram(List<string> userInput)
     }
     if (!string.IsNullOrWhiteSpace(fullPath))
     {
-        StartProcess(fullPath, args);
+        StartProcess(fullPath, string.Join(" ", userInput));
         return;
     }
     Console.WriteLine($"{fileName}: command not found");
