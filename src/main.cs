@@ -225,6 +225,6 @@ void StartProcess(string fileName, string args, StreamWriter stream = null)
     process.Start();
     process.BeginOutputReadLine();
     process.WaitForExit();
-    Console.Write(output.ToString());
+    Console.Write(output.ToString().Trim());
     return;
 }
