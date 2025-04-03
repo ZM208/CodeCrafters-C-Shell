@@ -97,7 +97,7 @@ void CheckForProgram(List<string> userInput)
         //Console.SetOut(writer);
         int v = userInput.IndexOf(">");
         userInput.RemoveRange(v, userInput.Count - v);
-        StartProcess(fullPath, args, writer);
+        StartProcess(fs.Name, args, writer);
         Console.SetOut(originalOutput);
         writer.Close();
         fs.Close();
