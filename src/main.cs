@@ -94,7 +94,7 @@ void CheckForProgram(List<string> userInput)
         FileStream fs = new FileStream(userInput[userInput.Count - 1], FileMode.Create);
         StreamWriter writer = new StreamWriter(fs, new UTF8Encoding(true)) { AutoFlush = true}; 
         var originalOutput = Console.Out;
-        //Console.SetOut(writer);
+        Console.SetOut(writer);
         userInput.RemoveRange(userInput.Count - 2, 2);
         StartProcess(fullPath, string.Join(" ", userInput), writer);
         Console.SetOut(originalOutput);
