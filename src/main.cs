@@ -16,11 +16,16 @@ string WorkingDirectory = Environment.CurrentDirectory;
 // need to replace single quotes and double quotes with unique characters so regex won't try to keep literal value when matching
 const string SingleQuotesEscaped = "[sq]";
 const string DoubleQuotesEscaped = "[dq]";
+FileStream Fs = null;
+StreamWriter Writer = null; 
+TextWriter DefaultOutput = Console.Out;
 char[] EscapedSpecialCharacters = { '\"', '\'', '\\', 'n' };
 while (true)
 {
     Console.Write("$ "); 
     List<string> userInput = HandleUserInput(Console.ReadLine() ?? "");
+    if (userInput.Contains(">"))
+        BeginRedirectOutput(userInput);
     string command = userInput[0];
     switch (command)
     {
@@ -67,6 +72,23 @@ while (true)
                 break;
             }
     }
+    if (userInput.Contains(">"))
+        EndRedirectOutput();
+}
+
+void BeginRedirectOutput(List<string> userInput)
+{
+    Fs = new FileStream(userInput[userInput.Count - 1], FileMode.Create);
+    Writer = new StreamWriter(Fs, new UTF8Encoding(true)) { AutoFlush = true };
+    Console.SetOut(Writer);
+    userInput.RemoveRange(userInput.Count - 2, 2);
+}
+
+void EndRedirectOutput()
+{
+    Console.SetOut(DefaultOutput);
+    Writer.Close();
+    Fs.Close();
 }
 void CheckCommandPathExists(string inputText)
 {
@@ -88,20 +110,7 @@ void CheckForProgram(List<string> userInput)
     var fileName = userInput[0];
     userInput.RemoveAt(0);
     var fullPath = CheckFilePathExist(fileName);
-    if (userInput.Contains(">"))
-    {
-        FileStream fs = new FileStream(userInput[userInput.Count - 1], FileMode.Create);
-        StreamWriter writer = new StreamWriter(fs, new UTF8Encoding(true)) { AutoFlush = true}; 
-        var originalOutput = Console.Out;
-        Console.SetOut(writer);
-        userInput.RemoveRange(userInput.Count - 2, 2);
-        StartProcess(fullPath, string.Join(" ", userInput), writer);
-        Console.SetOut(originalOutput);
-        writer.Close();
-        fs.Close();
-        return;
-        
-    }
+
     if (!string.IsNullOrWhiteSpace(fullPath))
     {
         StartProcess(fullPath, string.Join(" ", userInput));
@@ -210,7 +219,7 @@ string FilterUserInput(string userInput, bool catMode)
     return result;
 }
 
-void StartProcess(string fileName, string args, StreamWriter stream = null)
+void StartProcess(string fileName, string args)
 {
     ProcessStartInfo startInfo = new ProcessStartInfo(fileName, args);
     Process process = new Process() { StartInfo = startInfo };
@@ -218,10 +227,8 @@ void StartProcess(string fileName, string args, StreamWriter stream = null)
     process.StartInfo.RedirectStandardOutput = true;
     process.StartInfo.RedirectStandardError = false;
     StringBuilder output = new StringBuilder();
-    if (stream != null)
-    {
-        process.OutputDataReceived += (_, dataReceived) => output.AppendLine(dataReceived.Data);
-    }
+    process.OutputDataReceived += (_, dataReceived) => output.AppendLine(dataReceived.Data);
+
     process.Start();
     process.BeginOutputReadLine();
     process.WaitForExit();
