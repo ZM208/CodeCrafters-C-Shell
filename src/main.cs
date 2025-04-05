@@ -81,7 +81,8 @@ void BeginRedirectOutput(List<string> userInput)
     Fs = new FileStream(userInput[userInput.Count - 1], FileMode.Create);
     Writer = new StreamWriter(Fs, new UTF8Encoding(true)) { AutoFlush = true };
     Console.SetOut(Writer);
-    userInput.RemoveRange(userInput.Count - 2, 2);
+    var symbolIndex = userInput.IndexOf(">");
+    userInput.RemoveRange(symbolIndex, userInput.Count - symbolIndex);
 }
 
 void EndRedirectOutput()
