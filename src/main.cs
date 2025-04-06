@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using static System.Net.Mime.MediaTypeNames;
 using System.Diagnostics.Tracing;
 using System.Text;
+using System.Net.WebSockets;
 // Uncomment this line to pass the first stage
 
 // Wait for user input
@@ -20,6 +21,7 @@ FileStream Fs = null;
 StreamWriter Writer = null; 
 TextWriter DefaultOutput = null;
 char[] EscapedSpecialCharacters = { '\"', '\'', '\\', 'n' };
+
 while (true)
 {
     Console.Write("$ "); 
@@ -82,6 +84,7 @@ void BeginRedirectOutput(List<string> userInput)
     Writer = new StreamWriter(Fs, new UTF8Encoding(true)) { AutoFlush = true };
     DefaultOutput = Console.Out;
     Console.SetOut(Writer);
+    userInput.
     var symbolIndex = userInput.IndexOf(">");
     userInput.RemoveRange(symbolIndex, userInput.Count - symbolIndex);
 }
@@ -193,7 +196,7 @@ List<string> HandleUserInput(string userInput)
  
 string FilterUserInput(string userInput, bool catMode)
 {
-    userInput = userInput.Replace(DoubleQuotesEscaped, "\"").Replace(SingleQuotesEscaped, "\'");
+    userInput = userInput.Replace(DoubleQuotesEscaped, "\"").Replace(SingleQuotesEscaped, "\'").Replace("1>", ">");
     string result = "";
     bool doubleQuotes = false;
     bool singleQuotes = false;
