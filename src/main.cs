@@ -89,6 +89,7 @@ void BeginRedirectOutput(List<string> userInput)
 void EndRedirectOutput()
 {
     Console.SetOut(DefaultOutput);
+    Console.Write("test");
     Writer.Close();
     Fs.Close();
 }
