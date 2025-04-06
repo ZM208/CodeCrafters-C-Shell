@@ -72,7 +72,7 @@ while (true)
                 break;
             }
     }
-    if (userInput.Contains(">"))
+    if (Fs != null)
         EndRedirectOutput();
 }
 
@@ -81,7 +81,7 @@ void BeginRedirectOutput(List<string> userInput)
     Fs = new FileStream(userInput[userInput.Count - 1], FileMode.Create);
     Writer = new StreamWriter(Fs, new UTF8Encoding(true)) { AutoFlush = true };
     DefaultOutput = Console.Out;
-    //Console.SetOut(Writer);
+    Console.SetOut(Writer);
     var symbolIndex = userInput.IndexOf(">");
     userInput.RemoveRange(symbolIndex, userInput.Count - symbolIndex);
 }
@@ -89,9 +89,10 @@ void BeginRedirectOutput(List<string> userInput)
 void EndRedirectOutput()
 {
     Console.SetOut(DefaultOutput);
-    Console.Write("test");
     Writer.Close();
     Fs.Close();
+    Fs = null;
+    Writer = null; 
 }
 void CheckCommandPathExists(string inputText)
 {
