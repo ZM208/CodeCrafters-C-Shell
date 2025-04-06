@@ -84,7 +84,6 @@ void BeginRedirectOutput(List<string> userInput)
     Writer = new StreamWriter(Fs, new UTF8Encoding(true)) { AutoFlush = true };
     DefaultOutput = Console.Out;
     Console.SetOut(Writer);
-    userInput.
     var symbolIndex = userInput.IndexOf(">");
     userInput.RemoveRange(symbolIndex, userInput.Count - symbolIndex);
 }
