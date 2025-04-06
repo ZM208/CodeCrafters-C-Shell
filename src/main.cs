@@ -7,6 +7,7 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Diagnostics.Tracing;
 using System.Text;
 using System.Net.WebSockets;
+using System.IO;
 // Uncomment this line to pass the first stage
 
 // Wait for user input
@@ -64,6 +65,12 @@ while (true)
             {
                 userInput.RemoveAt(0);
                 userInput = userInput.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+                var invalidPath = userInput.FirstOrDefault(x => !File.Exists(x));
+                if (invalidPath != null)
+                {
+                    Console.WriteLine($"cat: {invalidPath}: No such file or directory");
+                    break;
+                }
                 var allContent = userInput.Select(File.ReadAllText);
                 Console.WriteLine(string.Join("", allContent).Trim());
                 break; 
