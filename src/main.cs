@@ -68,6 +68,7 @@ while (true)
                 var invalidPath = userInput.FirstOrDefault(x => !File.Exists(x));
                 if (invalidPath != null)
                 {
+                    Console.SetOut(DefaultOutput); // test fix for cat errors. Refactoring if works for proper fix
                     Console.WriteLine($"cat: {invalidPath}: No such file or directory");
                     break;
                 }
