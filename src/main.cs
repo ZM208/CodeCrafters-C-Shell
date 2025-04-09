@@ -21,9 +21,12 @@ const string DoubleQuotesEscaped = "[dq]";
 FileStream Fs = null;
 StreamWriter Writer = null;
 StringBuilder RedirectOuput = null;
-string OutputFile = null; 
+string OutputFile = null;
+FileMode OutputMode = FileMode.Create; 
 StringBuilder RedirectError = null;
 string ErrorFile = null;
+FileMode ErrorMode = FileMode.Create;
+
 char[] EscapedSpecialCharacters = { '\"', '\'', '\\', 'n' };
 
 while (true)
@@ -102,12 +105,28 @@ List<string> CheckForRedirection(List<string> userInputs)
 {
     var redirectOutput = userInputs.IndexOf(">");
     if (redirectOutput != -1)
+        OutputMode = FileMode.Create;
+    var redirectOutputExisting = userInputs.IndexOf(">>");
+    if (redirectOutputExisting != -1)
+    {
+        OutputMode = FileMode.Open;
+        redirectOutput = redirectOutputExisting;
+    }
+    if (redirectOutput != -1)
     {
         RedirectOuput = new StringBuilder();
         OutputFile = userInputs[redirectOutput + 2];
         userInputs.RemoveRange(redirectOutput, userInputs.Count - redirectOutput);
     }
     var redirectError = userInputs.IndexOf("2>");
+    if (redirectError != -1)
+        OutputMode = FileMode.Create;
+    var redirectErrorExisting = userInputs.IndexOf("2>>");
+    if (redirectOutputExisting != -1)
+    {
+        OutputMode = FileMode.Open;
+        redirectError = redirectOutputExisting;
+    }
     if (redirectError != -1)
     {
         RedirectError = new StringBuilder();
