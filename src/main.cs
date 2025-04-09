@@ -116,8 +116,6 @@ List<string> CheckForRedirection(List<string> userInputs)
     {
         RedirectOuput = new StringBuilder();
         OutputFile = userInputs[redirectOutput + 2];
-        if (string.IsNullOrEmpty(CheckFilePathExist(OutputFile)))
-            OutputMode = FileMode.Create;
         userInputs.RemoveRange(redirectOutput, userInputs.Count - redirectOutput);
     }
     var redirectError = userInputs.IndexOf("2>");
@@ -133,8 +131,6 @@ List<string> CheckForRedirection(List<string> userInputs)
     {
         RedirectError = new StringBuilder();
         ErrorFile = userInputs[redirectError + 2];
-        if (string.IsNullOrEmpty(CheckFilePathExist(ErrorFile)))
-            erro = FileMode.Create;
         userInputs.RemoveRange(redirectError, userInputs.Count - redirectError);
     }
     return userInputs;
