@@ -291,7 +291,6 @@ void StartProcess(string filePath, string fileName, string args)
     process.WaitForExit();
     if (!string.IsNullOrWhiteSpace(output.ToString()))
         WriteLine(output.ToString().Trim());
-    if (!string.IsNullOrWhiteSpace(errors.ToString()))
-        WriteLine(errors.ToString().Trim(), isError: true);
+    WriteLine(errors.ToString().Trim(), isError: true);
     return;
 }
