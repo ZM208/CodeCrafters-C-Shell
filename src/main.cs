@@ -65,15 +65,19 @@ while (true)
             {
                 userInput.RemoveAt(0);
                 userInput = userInput.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-                var invalidPath = userInput.FirstOrDefault(x => !File.Exists(x));
-                if (invalidPath != null)
+                var invalidPaths = userInput.Where(x => !File.Exists(x));
+                var validPaths = userInput.Where(File.Exists);
+                if (validPaths.Any())
+                {
+                    var allContent = validPaths.Select(File.ReadAllText);
+                    Console.WriteLine(string.Join("", allContent).Trim());
+                }
+                foreach (var path in invalidPaths)
                 {
                     Console.SetOut(DefaultOutput); // test fix for cat errors. Refactoring if works for proper fix
-                    Console.WriteLine($"cat: {invalidPath}: No such file or directory");
+                    Console.WriteLine($"cat: {path}: No such file or directory");
                     break;
-                }
-                var allContent = userInput.Select(File.ReadAllText);
-                Console.WriteLine(string.Join("", allContent).Trim());
+                } 
                 break; 
             }
         default:
