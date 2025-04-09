@@ -20,7 +20,7 @@ const string SingleQuotesEscaped = "[sq]";
 const string DoubleQuotesEscaped = "[dq]";
 FileStream Fs = null;
 StreamWriter Writer = null; 
-TextWriter DefaultOutput = null;
+TextWriter DefaultOutput = Console.Out;
 char[] EscapedSpecialCharacters = { '\"', '\'', '\\', 'n' };
 
 while (true)
@@ -90,7 +90,6 @@ void BeginRedirectOutput(List<string> userInput)
 {
     Fs = new FileStream(userInput[userInput.Count - 1], FileMode.Create);
     Writer = new StreamWriter(Fs, new UTF8Encoding(true)) { AutoFlush = true };
-    DefaultOutput = Console.Out;
     Console.SetOut(Writer);
     var symbolIndex = userInput.IndexOf(">");
     userInput.RemoveRange(symbolIndex, userInput.Count - symbolIndex);
