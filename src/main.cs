@@ -19,16 +19,18 @@ string WorkingDirectory = Environment.CurrentDirectory;
 const string SingleQuotesEscaped = "[sq]";
 const string DoubleQuotesEscaped = "[dq]";
 FileStream Fs = null;
-StreamWriter Writer = null; 
-TextWriter DefaultOutput = Console.Out;
+StreamWriter Writer = null;
+StringBuilder RedirectOuput = null;
+string OutputFile = null; 
+StringBuilder RedirectError = null;
+string ErrorFile = null;
 char[] EscapedSpecialCharacters = { '\"', '\'', '\\', 'n' };
 
 while (true)
 {
     Console.Write("$ "); 
     List<string> userInput = HandleUserInput(Console.ReadLine() ?? "");
-    if (userInput.Contains(">"))
-        BeginRedirectOutput(userInput);
+    userInput = CheckForRedirection(userInput);
     string command = userInput[0];
     switch (command)
     {
@@ -36,7 +38,7 @@ while (true)
             {
                 userInput.RemoveRange(0,2);
                 string text = string.Join("", userInput);
-                Console.WriteLine(text);
+                WriteLine(text);
                 
                 break;
             }
@@ -58,7 +60,7 @@ while (true)
             }
         case "pwd":
             {
-                Console.WriteLine(WorkingDirectory);
+                WriteLine(WorkingDirectory);
                 break;
             }
         case "cat":
@@ -70,12 +72,11 @@ while (true)
                 if (validPaths.Any())
                 {
                     var allContent = validPaths.Select(File.ReadAllText);
-                    Console.WriteLine(string.Join("", allContent).Trim());
+                    WriteLine(string.Join("", allContent).Trim());
                 }
                 foreach (var path in invalidPaths)
                 {
-                    Console.SetOut(DefaultOutput); // test fix for cat errors. Refactoring if works for proper fix
-                    Console.WriteLine($"cat: {path}: No such file or directory");
+                    WriteLine($"cat: {path}: No such file or directory", isError: true);
                     break;
                 } 
                 break; 
@@ -86,24 +87,58 @@ while (true)
                 break;
             }
     }
-    if (Fs != null)
-        EndRedirectOutput();
+    EndRedirectOutput();
 }
-
-void BeginRedirectOutput(List<string> userInput)
+void WriteLine(string text, bool isError = false)
 {
-    Fs = new FileStream(userInput[userInput.Count - 1], FileMode.Create);
-    Writer = new StreamWriter(Fs, new UTF8Encoding(true)) { AutoFlush = true };
-    Console.SetOut(Writer);
-    var symbolIndex = userInput.IndexOf(">");
-    userInput.RemoveRange(symbolIndex, userInput.Count - symbolIndex);
+    if (isError && RedirectError != null)
+        RedirectError.AppendLine(text);
+    else if (RedirectOuput != null && !isError)
+        RedirectOuput.AppendLine(text);
+    else 
+        Console.WriteLine(text);
+}
+List<string> CheckForRedirection(List<string> userInputs)
+{
+    var redirectOutput = userInputs.IndexOf(">");
+    if (redirectOutput != -1)
+    {
+        RedirectOuput = new StringBuilder();
+        OutputFile = userInputs[redirectOutput + 1];
+        userInputs.RemoveRange(redirectOutput, userInputs.Count - redirectOutput);
+    }
+    var redirectError = userInputs.IndexOf("2>");
+    if (redirectError != -1)
+    {
+        RedirectError = new StringBuilder();
+        ErrorFile = userInputs[redirectError + 1];
+        userInputs.RemoveRange(redirectOutput, userInputs.Count - redirectOutput);
+    }
+    return userInputs;
 }
 
 void EndRedirectOutput()
 {
-    Console.SetOut(DefaultOutput);
-    Writer.Close();
-    Fs.Close();
+    if (RedirectError != null)
+    {
+        Fs = new FileStream(ErrorFile, FileMode.Create);
+        Writer = new StreamWriter(Fs, new UTF8Encoding(true)) { AutoFlush = true };
+        Writer.Write(RedirectError.ToString().Trim());
+        Writer.Close();
+        Fs.Close();
+        ErrorFile = null;
+        RedirectError = null;
+    }
+    if (RedirectOuput != null)
+    {
+        Fs = new FileStream(OutputFile, FileMode.Create);
+        Writer = new StreamWriter(Fs, new UTF8Encoding(true)) { AutoFlush = true };
+        Writer.Write(RedirectError.ToString().Trim());
+        Writer.Close();
+        Fs.Close();
+        OutputFile = null;
+        RedirectOuput = null;
+    }
     Fs = null;
     Writer = null; 
 }
@@ -111,14 +146,14 @@ void CheckCommandPathExists(string inputText)
 {
     if (AllCommands.Contains(inputText))
     {
-        Console.WriteLine($"{inputText} is a shell builtin");
+        WriteLine($"{inputText} is a shell builtin");
         return;
     }
     var fullPath = CheckFilePathExist(inputText);
     if (!string.IsNullOrWhiteSpace(fullPath))
-        Console.WriteLine($"{inputText} is {fullPath}");
+        WriteLine($"{inputText} is {fullPath}");
     else
-        Console.WriteLine($"{inputText}: not found");
+        WriteLine($"{inputText}: not found", isError: true);
 }
 
 void CheckForProgram(List<string> userInput)
@@ -133,7 +168,7 @@ void CheckForProgram(List<string> userInput)
         StartProcess(fullPath, fileName, string.Join(" ", userInput));
         return;
     }
-    Console.WriteLine($"{fileName}: command not found");
+    WriteLine($"{fileName}: command not found", isError: true);
 }
 
 string CheckFilePathExist(string inputText, bool includeFileName = true)
@@ -166,7 +201,7 @@ void ChangeDirectory(string requestDirectory)
         var listAllDirectories = Directory.GetDirectories(newDirectory);
         foreach (var directory in listAllDirectories)
         {
-            Console.WriteLine(directory);
+            WriteLine(directory);
         }
     }
     else if (requestDirectory.Contains("./")) {
@@ -184,7 +219,7 @@ void ChangeDirectory(string requestDirectory)
     if (Path.Exists(newDirectory))
         WorkingDirectory = newDirectory;
     else
-        Console.WriteLine($"cd: {newDirectory}: No such file or directory");
+        WriteLine($"cd: {newDirectory}: No such file or directory", isError: true);
 }
 
 List<string> HandleUserInput(string userInput)
@@ -206,7 +241,9 @@ List<string> HandleUserInput(string userInput)
  
 string FilterUserInput(string userInput, bool catMode)
 {
-    userInput = userInput.Replace(DoubleQuotesEscaped, "\"").Replace(SingleQuotesEscaped, "\'").Replace("1>", ">");
+    userInput = userInput.Replace(DoubleQuotesEscaped, "\"")
+                         .Replace(SingleQuotesEscaped, "\'")
+                         .Replace("1>", ">");
     string result = "";
     bool doubleQuotes = false;
     bool singleQuotes = false;
@@ -246,11 +283,13 @@ void StartProcess(string filePath, string fileName, string args)
     process.StartInfo.RedirectStandardOutput = true;
     process.StartInfo.RedirectStandardError = false;
     StringBuilder output = new StringBuilder();
+    StringBuilder errors = new StringBuilder();
     process.OutputDataReceived += (_, dataReceived) => output.AppendLine(dataReceived.Data);
-
+    process.ErrorDataReceived += (_, dataReceived) => errors.AppendLine(dataReceived.Data);
     process.Start();
     process.BeginOutputReadLine();
     process.WaitForExit();
-    Console.WriteLine(output.ToString().Trim());
+    WriteLine(output.ToString().Trim());
+    WriteLine(errors.ToString().Trim(), isError: true);
     return;
 }
