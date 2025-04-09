@@ -112,7 +112,7 @@ List<string> CheckForRedirection(List<string> userInputs)
     {
         RedirectError = new StringBuilder();
         ErrorFile = userInputs[redirectError + 1];
-        userInputs.RemoveRange(redirectError, userInputs.Count - redirectOutput);
+        userInputs.RemoveRange(redirectError, userInputs.Count - redirectError);
     }
     return userInputs;
 }
