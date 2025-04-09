@@ -104,14 +104,14 @@ List<string> CheckForRedirection(List<string> userInputs)
     if (redirectOutput != -1)
     {
         RedirectOuput = new StringBuilder();
-        OutputFile = userInputs[redirectOutput + 1];
+        OutputFile = userInputs[redirectOutput + 2];
         userInputs.RemoveRange(redirectOutput, userInputs.Count - redirectOutput);
     }
     var redirectError = userInputs.IndexOf("2>");
     if (redirectError != -1)
     {
         RedirectError = new StringBuilder();
-        ErrorFile = userInputs[redirectError + 1];
+        ErrorFile = userInputs[redirectError + 2];
         userInputs.RemoveRange(redirectError, userInputs.Count - redirectError);
     }
     return userInputs;
