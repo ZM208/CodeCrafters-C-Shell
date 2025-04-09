@@ -112,7 +112,7 @@ List<string> CheckForRedirection(List<string> userInputs)
     {
         RedirectError = new StringBuilder();
         ErrorFile = userInputs[redirectError + 1];
-        userInputs.RemoveRange(redirectOutput, userInputs.Count - redirectOutput);
+        userInputs.RemoveRange(redirectError, userInputs.Count - redirectOutput);
     }
     return userInputs;
 }
@@ -133,7 +133,7 @@ void EndRedirectOutput()
     {
         Fs = new FileStream(OutputFile, FileMode.Create);
         Writer = new StreamWriter(Fs, new UTF8Encoding(true)) { AutoFlush = true };
-        Writer.Write(RedirectError.ToString().Trim());
+        Writer.Write(RedirectOuput.ToString().Trim());
         Writer.Close();
         Fs.Close();
         OutputFile = null;
