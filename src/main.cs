@@ -126,24 +126,24 @@ void CheckForProgram(List<string> userInput)
     userInput = userInput.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
     var fileName = userInput[0];
     userInput.RemoveAt(0);
-    var fullPath = CheckFilePathExist(fileName);
+    var fullPath = CheckFilePathExist(fileName, includeFileName: false);
 
     if (!string.IsNullOrWhiteSpace(fullPath))
     {
-        StartProcess(fullPath, string.Join(" ", userInput));
+        StartProcess(fullPath, fileName, string.Join(" ", userInput));
         return;
     }
     Console.WriteLine($"{fileName}: command not found");
 }
 
-string CheckFilePathExist(string inputText)
+string CheckFilePathExist(string inputText, bool includeFileName = true)
 {
     foreach (var path in Paths)
     {
         var fullPath = Path.Combine(path, inputText);
         if (Path.Exists(fullPath))
         {
-            return fullPath;
+            return includeFileName ? fullPath : path;
         }
     }
     return "";
@@ -236,10 +236,12 @@ string FilterUserInput(string userInput, bool catMode)
     return result;
 }
 
-void StartProcess(string fileName, string args)
+void StartProcess(string filePath, string fileName, string args)
 {
     ProcessStartInfo startInfo = new ProcessStartInfo(fileName, args);
     Process process = new Process() { StartInfo = startInfo };
+    process.StartInfo.FileName = fileName;
+    process.StartInfo.WorkingDirectory = filePath; 
     process.StartInfo.UseShellExecute = false;
     process.StartInfo.RedirectStandardOutput = true;
     process.StartInfo.RedirectStandardError = false;
