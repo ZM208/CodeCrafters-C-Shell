@@ -122,10 +122,10 @@ List<string> CheckForRedirection(List<string> userInputs)
     if (redirectError != -1)
         OutputMode = FileMode.Create;
     var redirectErrorExisting = userInputs.IndexOf("2>>");
-    if (redirectOutputExisting != -1)
+    if (redirectErrorExisting != -1)
     {
         OutputMode = FileMode.Open;
-        redirectError = redirectOutputExisting;
+        redirectError = redirectErrorExisting;
     }
     if (redirectError != -1)
     {
