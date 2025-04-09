@@ -118,13 +118,14 @@ List<string> CheckForRedirection(List<string> userInputs)
         OutputFile = userInputs[redirectOutput + 2];
         userInputs.RemoveRange(redirectOutput, userInputs.Count - redirectOutput);
     }
+
     var redirectError = userInputs.IndexOf("2>");
     if (redirectError != -1)
-        OutputMode = FileMode.Create;
+        ErrorMode = FileMode.Create;
     var redirectErrorExisting = userInputs.IndexOf("2>>");
     if (redirectErrorExisting != -1)
     {
-        OutputMode = FileMode.Open;
+        ErrorMode = FileMode.Open;
         redirectError = redirectErrorExisting;
     }
     if (redirectError != -1)
