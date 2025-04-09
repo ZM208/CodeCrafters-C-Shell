@@ -25,7 +25,7 @@ char[] EscapedSpecialCharacters = { '\"', '\'', '\\', 'n' };
 
 while (true)
 {
-    Console.WriteLine("$ "); 
+    Console.Write("$ "); 
     List<string> userInput = HandleUserInput(Console.ReadLine() ?? "");
     if (userInput.Contains(">"))
         BeginRedirectOutput(userInput);
@@ -249,6 +249,6 @@ void StartProcess(string fileName, string args)
     process.Start();
     process.BeginOutputReadLine();
     process.WaitForExit();
-    Console.Write(output.ToString().Trim());
+    Console.WriteLine(output.ToString().Trim());
     return;
 }
