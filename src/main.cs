@@ -117,13 +117,13 @@ List<string> CheckForRedirection(List<string> userInputs)
     return userInputs;
 }
 
-void EndRedirectOutput()
+async Task EndRedirectOutput()
 {
     if (RedirectError != null)
     {
         Fs = new FileStream(ErrorFile, FileMode.Create);
         Writer = new StreamWriter(Fs, new UTF8Encoding(true)) { AutoFlush = true };
-        Writer.Write(RedirectError.ToString().Trim());
+        await Writer.WriteAsync(RedirectError.ToString().Trim());
         Writer.Close();
         Fs.Close();
         ErrorFile = null;
@@ -133,7 +133,7 @@ void EndRedirectOutput()
     {
         Fs = new FileStream(OutputFile, FileMode.Create);
         Writer = new StreamWriter(Fs, new UTF8Encoding(true)) { AutoFlush = true };
-        Writer.Write(RedirectOuput.ToString().Trim());
+        await Writer.WriteAsync(RedirectOuput.ToString().Trim());
         Writer.Close();
         Fs.Close();
         OutputFile = null;
