@@ -134,7 +134,7 @@ List<string> CheckForRedirection(List<string> userInputs)
         RedirectError = new StringBuilder();
         ErrorFile = userInputs[redirectError + 2];
         if (string.IsNullOrEmpty(CheckFilePathExist(ErrorFile)))
-            ErrorMode = FileMode.Create;
+            erro = FileMode.Create;
         userInputs.RemoveRange(redirectError, userInputs.Count - redirectError);
     }
     return userInputs;
@@ -144,21 +144,17 @@ async Task EndRedirectOutput()
 {
     if (RedirectError != null)
     {
-        Fs = new FileStream(ErrorFile, ErrorMode);
-        Writer = new StreamWriter(Fs) { AutoFlush = true };
+        Writer = new StreamWriter(ErrorFile, append: ErrorMode == FileMode.Open) { AutoFlush = true };
         await Writer.WriteAsync(RedirectError.ToString().Trim());
         Writer.Close();
-        Fs.Close();
         ErrorFile = null;
         RedirectError = null;
     }
     if (RedirectOuput != null)
     {
-        Fs = new FileStream(OutputFile, OutputMode);
-        Writer = new StreamWriter(Fs) { AutoFlush = true };
+        Writer = new StreamWriter(OutputFile, append: OutputMode == FileMode.Open) { AutoFlush = true };
         await Writer.WriteAsync(RedirectOuput.ToString().Trim());
         Writer.Close();
-        Fs.Close();
         OutputFile = null;
         RedirectOuput = null;
     }
