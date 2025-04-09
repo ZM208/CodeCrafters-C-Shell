@@ -91,7 +91,7 @@ while (true)
 }
 void WriteLine(string text, bool isError = false)
 {
-    if (isError && RedirectError != null)
+    if (isError && RedirectError != null && false)
         RedirectError.AppendLine(text);
     else if (RedirectOuput != null && !isError)
         RedirectOuput.AppendLine(text);
