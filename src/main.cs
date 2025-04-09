@@ -289,7 +289,9 @@ void StartProcess(string filePath, string fileName, string args)
     process.Start();
     process.BeginOutputReadLine();
     process.WaitForExit();
-    WriteLine(output.ToString().Trim());
-    WriteLine(errors.ToString().Trim(), isError: true);
+    if (!string.IsNullOrWhiteSpace(output.ToString()))
+        WriteLine(output.ToString().Trim());
+    if (!string.IsNullOrWhiteSpace(errors.ToString()))
+        WriteLine(errors.ToString().Trim(), isError: true);
     return;
 }
