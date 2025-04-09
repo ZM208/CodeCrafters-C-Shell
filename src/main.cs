@@ -25,7 +25,7 @@ char[] EscapedSpecialCharacters = { '\"', '\'', '\\', 'n' };
 
 while (true)
 {
-    Console.Write("$ "); 
+    Console.WriteLine("$ "); 
     List<string> userInput = HandleUserInput(Console.ReadLine() ?? "");
     if (userInput.Contains(">"))
         BeginRedirectOutput(userInput);
