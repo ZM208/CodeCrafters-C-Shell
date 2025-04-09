@@ -281,7 +281,7 @@ void StartProcess(string filePath, string fileName, string args)
     process.StartInfo.WorkingDirectory = filePath; 
     process.StartInfo.UseShellExecute = false;
     process.StartInfo.RedirectStandardOutput = true;
-    process.StartInfo.RedirectStandardError = false;
+    process.StartInfo.RedirectStandardError = true;
     StringBuilder output = new StringBuilder();
     StringBuilder errors = new StringBuilder();
     process.OutputDataReceived += (_, dataReceived) => output.AppendLine(dataReceived.Data);
