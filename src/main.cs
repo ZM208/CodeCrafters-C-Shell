@@ -141,7 +141,7 @@ async Task EndRedirectOutput()
     if (RedirectError != null)
     {
         Writer = new StreamWriter(ErrorFile, append: ErrorMode == FileMode.Open) { AutoFlush = true };
-        await Writer.WriteAsync(RedirectError.ToString().Trim());
+        await Writer.WriteLineAsync(RedirectError.ToString().Trim());
         Writer.Close();
         ErrorFile = null;
         RedirectError = null;
@@ -149,7 +149,7 @@ async Task EndRedirectOutput()
     if (RedirectOuput != null)
     {
         Writer = new StreamWriter(OutputFile, append: OutputMode == FileMode.Open) { AutoFlush = true };
-        await Writer.WriteAsync(RedirectOuput.ToString().Trim());
+        await Writer.WriteLineAsync(RedirectOuput.ToString().Trim());
         Writer.Close();
         OutputFile = null;
         RedirectOuput = null;
