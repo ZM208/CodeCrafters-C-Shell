@@ -119,26 +119,28 @@ List<string> CheckForRedirection(List<string> userInputs)
 
 async Task EndRedirectOutput()
 {
-    if (RedirectError != null)
+    if (!string.IsNullOrWhiteSpace(RedirectError.ToString()))
     {
         Fs = new FileStream(ErrorFile, FileMode.Create);
         Writer = new StreamWriter(Fs, new UTF8Encoding(true)) { AutoFlush = true };
         await Writer.WriteAsync(RedirectError.ToString().Trim());
         Writer.Close();
         Fs.Close();
-        ErrorFile = null;
-        RedirectError = null;
+        
     }
-    if (RedirectOuput != null)
+    if (!string.IsNullOrWhiteSpace(RedirectOuput.ToString()))
     {
         Fs = new FileStream(OutputFile, FileMode.Create);
         Writer = new StreamWriter(Fs, new UTF8Encoding(true)) { AutoFlush = true };
         await Writer.WriteAsync(RedirectOuput.ToString().Trim());
         Writer.Close();
         Fs.Close();
-        OutputFile = null;
-        RedirectOuput = null;
+        
     }
+    ErrorFile = null;
+    RedirectError = null;
+    OutputFile = null;
+    RedirectOuput = null;
     Fs = null;
     Writer = null; 
 }
