@@ -288,9 +288,11 @@ void StartProcess(string filePath, string fileName, string args)
     process.ErrorDataReceived += (_, dataReceived) => errors.AppendLine(dataReceived.Data);
     process.Start();
     process.BeginOutputReadLine();
+    process.BeginErrorReadLine();
     process.WaitForExit();
     if (!string.IsNullOrWhiteSpace(output.ToString()))
         WriteLine(output.ToString().Trim());
-    WriteLine(errors.ToString().Trim(), isError: true);
+    if (!string.IsNullOrWhiteSpace(errors.ToString()))
+        WriteLine(errors.ToString().Trim(), isError: true);
     return;
 }
