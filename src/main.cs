@@ -25,8 +25,11 @@ char[] EscapedSpecialCharacters = { '\"', '\'', '\\', 'n' };
 
 while (true)
 {
-    Console.Write("$ "); 
-    List<string> userInput = HandleUserInput(Console.ReadLine() ?? "");
+    Console.Write("$ ");
+    var input = Console.ReadLine();
+    if (string.IsNullOrWhiteSpace(input))
+        continue;
+    List<string> userInput = HandleUserInput(input ?? "");
     userInput = CheckForRedirection(userInput);
     string command = userInput[0];
     switch (command)
