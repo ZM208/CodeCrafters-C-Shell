@@ -8,6 +8,7 @@ using System.Diagnostics.Tracing;
 using System.Text;
 using System.Net.WebSockets;
 using System.IO;
+using src.Models;
 // Uncomment this line to pass the first stage
 
 // Wait for user input
@@ -18,15 +19,8 @@ string WorkingDirectory = Environment.CurrentDirectory;
 // need to replace single quotes and double quotes with unique characters so regex won't try to keep literal value when matching
 const string SingleQuotesEscaped = "[sq]";
 const string DoubleQuotesEscaped = "[dq]";
-FileStream Fs = null;
-StreamWriter Writer = null;
-StringBuilder RedirectOuput = null;
-string OutputFile = null;
-FileMode OutputMode = FileMode.Create; 
-StringBuilder RedirectError = null;
-string ErrorFile = null;
-FileMode ErrorMode = FileMode.Create;
-
+FileRedirection_Model Output = null;
+FileRedirection_Model Error = null; 
 char[] EscapedSpecialCharacters = { '\"', '\'', '\\', 'n' };
 
 while (true)
@@ -94,69 +88,58 @@ while (true)
 }
 void WriteLine(string text, bool isError = false)
 {
-    if (isError && RedirectError != null)
-        RedirectError.AppendLine(text);
-    else if (RedirectOuput != null && !isError)
-        RedirectOuput.AppendLine(text);
+    if (isError && Error != null)
+        Error.Output.AppendLine(text);
+    else if (Output != null && !isError)
+        Output.Output.AppendLine(text);
     else 
         Console.WriteLine(text);
 }
 List<string> CheckForRedirection(List<string> userInputs)
 {
+
     var redirectOutput = userInputs.IndexOf(">");
     if (redirectOutput != -1)
-        OutputMode = FileMode.Create;
+    {
+        Output = new FileRedirection_Model(userInputs, true ,redirectOutput);
+        userInputs.RemoveRange(redirectOutput, userInputs.Count - redirectOutput);
+    }
+
     var redirectOutputExisting = userInputs.IndexOf(">>");
     if (redirectOutputExisting != -1)
     {
-        OutputMode = FileMode.Open;
-        redirectOutput = redirectOutputExisting;
-    }
-    if (redirectOutput != -1)
-    {
-        RedirectOuput = new StringBuilder();
-        OutputFile = userInputs[redirectOutput + 2];
-        userInputs.RemoveRange(redirectOutput, userInputs.Count - redirectOutput);
+        Output = new FileRedirection_Model(userInputs, false , redirectOutputExisting);
+        userInputs.RemoveRange(redirectOutputExisting, userInputs.Count - redirectOutputExisting);
     }
 
     var redirectError = userInputs.IndexOf("2>");
     if (redirectError != -1)
-        ErrorMode = FileMode.Create;
+    {
+        Error = new FileRedirection_Model(userInputs, true , redirectError);
+        userInputs.RemoveRange(redirectError, userInputs.Count - redirectError);
+    }
+
     var redirectErrorExisting = userInputs.IndexOf("2>>");
     if (redirectErrorExisting != -1)
     {
-        ErrorMode = FileMode.Open;
-        redirectError = redirectErrorExisting;
-    }
-    if (redirectError != -1)
-    {
-        RedirectError = new StringBuilder();
-        ErrorFile = userInputs[redirectError + 2];
-        userInputs.RemoveRange(redirectError, userInputs.Count - redirectError);
+        Error = new FileRedirection_Model(userInputs, false, redirectErrorExisting);
+        userInputs.RemoveRange(redirectErrorExisting, userInputs.Count - redirectErrorExisting);
     }
     return userInputs;
 }
 
 async Task EndRedirectOutput()
 {
-    if (RedirectError != null)
+    if (Output != null)
     {
-        Writer = new StreamWriter(ErrorFile, append: ErrorMode == FileMode.Open) { AutoFlush = true };
-        await Writer.WriteAsync(RedirectError.ToString());
-        Writer.Close();
-        ErrorFile = null;
-        RedirectError = null;
+        Output.EndRedirection();
+        Output = null;
     }
-    if (RedirectOuput != null)
+    if (Error != null)
     {
-        Writer = new StreamWriter(OutputFile, append: OutputMode == FileMode.Open) { AutoFlush = true };
-        await Writer.WriteAsync(RedirectOuput.ToString());
-        Writer.Close();
-        OutputFile = null;
-        RedirectOuput = null;
+        Error.EndRedirection();
+        Error = null;
     }
-    Fs = null;
-    Writer = null; 
 }
 void CheckCommandPathExists(string inputText)
 {
